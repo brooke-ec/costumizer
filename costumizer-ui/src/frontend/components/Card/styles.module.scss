@@ -1,0 +1,41 @@
+$border: 1px solid #e0e0eb26;
+
+.card {
+	border: $border;
+	flex-direction: column;
+	border-radius: 4px;
+	overflow: hidden;
+	display: flex;
+}
+
+.title {
+	border-bottom: $border;
+	background-color: #393946;
+	padding: 0 5px 4px 5px;
+	text-align: center;
+}
+
+.card.reverse {
+	flex-direction: column-reverse;
+}
+
+.card.reverse > .title {
+	border-bottom: none;
+	border-top: $border;
+}
+
+.card.clickable {
+	cursor: pointer;
+
+	.title {
+		color: var(--link-standard);
+	}
+
+	&:hover > .title {
+		text-decoration: underline;
+	}
+
+	&:active > .title {
+		color: var(--link-active);
+	}
+}

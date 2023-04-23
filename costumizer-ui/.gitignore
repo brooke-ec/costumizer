@@ -1,0 +1,5 @@
+__pycache__/
+costumizer.secret
+node_modules
+dist
+.env

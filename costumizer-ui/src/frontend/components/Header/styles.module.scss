@@ -1,0 +1,33 @@
+@import "../../index.scss";
+
+header {
+	padding: 8px 0;
+	display: flex;
+}
+
+.user {
+	margin: 6px 0 6px auto;
+	display: flex;
+}
+
+.pfp {
+	border-radius: 3px;
+	margin: 0 4px;
+	height: 21px;
+	width: 21px;
+}
+
+.username {
+	color: #a8aab4;
+	font-size: 14px;
+	margin: 2px 0;
+}
+
+.loading {
+	@include shimmer(130px);
+}
+
+.username.loading {
+	border-radius: 5px;
+	width: 100px;
+}

@@ -1,0 +1,20 @@
+@mixin fixed() {
+	position: fixed;
+	height: 100%;
+	z-index: 100;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+
+.blur {
+	@include fixed();
+	background-color: #0008;
+}
+
+.positioner {
+	@include fixed();
+	justify-content: center;
+	align-items: center;
+	display: flex;
+}

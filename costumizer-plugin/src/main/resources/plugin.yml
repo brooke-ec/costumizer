@@ -1,0 +1,4 @@
+name: costumizer
+version: '${version}'
+main: net.nimajnebec.costumizer.Costumizer
+api-version: 1.19
