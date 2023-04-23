@@ -5,11 +5,19 @@ export type CostumesListType = {
 	preview: string;
 }[];
 
-export async function fetchCostumes(token: string): Promise<CostumesListType> {
-	return await request("/api/costume/list/", {
-		headers: new Headers({
-			Accept: "application/json",
-			Authorization: `Bearer ${token}`,
-		}),
-	});
+export async function fetchCostumes() {
+	return await request<CostumesListType>("/api/costume/list/");
+}
+
+export type CostumeInfoType = {
+	name: string;
+	display: string;
+	skin: {
+		url: string;
+		slim: boolean;
+	};
+};
+
+export async function fetchCostumeInfo(name: string) {
+	return await request<CostumeInfoType>("/api/costume/info/" + name);
 }

@@ -2,19 +2,29 @@ import UnexpectedError from "../../modals/UnexpectedError";
 import { useIdentity } from "../../components/Identity";
 import { useModal } from "../../components/Modal";
 
+export type ResponseData<T> = {
+	status: number;
+	data?: T;
+};
+
 export async function request<T>(
 	input: RequestInfo | URL,
-	init: RequestInit,
-): Promise<T> {
+	init: RequestInit = {},
+): Promise<ResponseData<T>> {
 	const identity = useIdentity();
 	const modal = useModal();
 
-	const response = await fetch(input, init);
+	const response = await fetch(input, {
+		...init,
+		headers: {
+			...init.headers,
+			Accept: "application/json",
+			Authorization: `Bearer ${identity.token()}`,
+		},
+	});
 
 	let json;
 	switch (response.status) {
-		case 200:
-			return await response.json();
 		case 401:
 			json = await response.json();
 			identity.invalidate(json.error);
@@ -24,6 +34,9 @@ export async function request<T>(
 			modal.open(UnexpectedError());
 			throw new Error(json.error);
 		default:
-			throw new Error(await response.text());
+			return {
+				status: response.status,
+				data: await response.json(),
+			};
 	}
 }

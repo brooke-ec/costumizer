@@ -1,5 +1,7 @@
+@import "../../index.scss";
+
 .list {
-	grid-template-columns: repeat(auto-fit, minmax(60px, 120px));
+	grid-template-columns: repeat(auto-fit, 120px);
 	margin-top: 15px;
 	display: grid;
 	gap: 8px 5px;
@@ -17,4 +19,10 @@
 	background-size: contain;
 	height: 100%;
 	width: 100%;
+}
+
+.loading_entry {
+	@include shimmer(800px);
+	border-radius: 4px;
+	height: 193px;
 }

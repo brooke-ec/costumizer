@@ -7,7 +7,7 @@ TEXTURE_BASE = r"https://textures.minecraft.net/texture/"
 proxy = Blueprint("proxy", __name__)
 
 
-@proxy.route("/texture/<hash>/")
+@proxy.get("/texture/<hash>/")
 def texture(hash: str):
     url = urlparse.urljoin(TEXTURE_BASE, hash)
     try:

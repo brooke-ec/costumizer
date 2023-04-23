@@ -1,13 +1,14 @@
-import { fetchUserInfo } from "../../utils/api/user";
 import { Show, createEffect, createResource } from "solid-js";
+import { A, Outlet, useLocation } from "@solidjs/router";
+import { fetchUserInfo } from "../../utils/api/user";
 import FaceRenderer from "../FaceRenderer";
 import { useIdentity } from "../Identity";
 import styles from "./styles.module.scss";
-import { Outlet } from "@solidjs/router";
 
 export default function Header() {
+	const [info] = createResource(fetchUserInfo);
 	const identity = useIdentity();
-	const [info] = createResource(identity.token, fetchUserInfo);
+	const location = useLocation();
 
 	createEffect(() => {
 		if (!identity.token()) identity.invalidate();
@@ -16,9 +17,12 @@ export default function Header() {
 	return (
 		<>
 			<header>
+				<Show when={location.pathname != "/"}>
+					<A href="/">Home</A>
+				</Show>
 				<div class={styles.user}>
 					<Show
-						when={!info.loading && info()}
+						when={!info.loading && info()?.data}
 						fallback={
 							<>
 								<div
@@ -36,8 +40,8 @@ export default function Header() {
 							</>
 						}
 					>
-						<FaceRenderer class={styles.pfp} src={info()!.skin} />
-						<span class={styles.username}>{info()!.name}</span>
+						<FaceRenderer class={styles.pfp} src={info()!.data!.skin} />
+						<span class={styles.username}>{info()!.data!.name}</span>
 					</Show>
 				</div>
 			</header>

@@ -6,11 +6,6 @@ export type UserInfoType = {
 	skin: string;
 };
 
-export async function fetchUserInfo(token: string): Promise<UserInfoType> {
-	return await request("/api/user/info/", {
-		headers: {
-			Accept: "application/json",
-			Authorization: `Bearer ${token}`,
-		},
-	});
+export async function fetchUserInfo() {
+	return await request<UserInfoType>("/api/user/info/");
 }

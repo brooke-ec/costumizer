@@ -1,3 +1,5 @@
+from costumizer.errors import NoRecordError
+from contextlib import contextmanager
 import costumizer.config as config
 from typing import TypedDict
 import mysql.connector
@@ -19,18 +21,45 @@ def setup_pool() -> None:
     con.close()
 
 
-class GetCostumesType(TypedDict):
+@contextmanager
+def connect():
+    with mysql.connector.connect(pool_name=POOL_NAME) as conn:
+        with conn.cursor() as cur:
+            yield cur
+
+
+class CostumesListType(TypedDict):
     name: str
     hash: str
     slim: bool
 
 
-def get_costumes(uuid: str) -> list[GetCostumesType]:
-    with mysql.connector.connect(pool_name=POOL_NAME) as conn:
-        cur = conn.cursor()
+def get_costumes_list(uuid: str) -> list[CostumesListType]:
+    with connect() as cur:
         cur.execute(
             """SELECT c.name, s.hash, s.slim FROM costume c
-            INNER JOIN skin s ON c.skin = s.hash WHERE owner = %s""",
+            INNER JOIN skin s ON c.skin = s.hash WHERE c.owner = %s
+            ORDER BY c.name""",
             (uuid,),
         )
         return [{"name": c[0], "hash": c[1], "slim": bool(c[2])} for c in cur.fetchall()]
+
+
+class CostumeInfoType(TypedDict):
+    display: str
+    slim: bool
+    name: str
+    hash: str
+
+
+def get_costume_info(uuid: str, name: str) -> CostumeInfoType:
+    with connect() as cur:
+        cur.execute(
+            """SELECT c.name, c.display, s.hash, s.slim FROM costume c
+        INNER JOIN skin s ON c.skin = s.hash WHERE c.owner = %s AND c.name = %s""",
+            (uuid, name),
+        )
+        c = cur.fetchone()
+        if c is None:
+            raise NoRecordError("Could not find costume.")
+        return {"name": c[0], "display": c[1], "hash": c[2], "slim": bool(c[3])}
