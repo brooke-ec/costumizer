@@ -1,15 +1,20 @@
-* {
-	color: #fff;
-}
-
 html {
-	--background: #2f2f3b;
+	--background-0: #383846;
+	--background-1: #2f2f3b;
+	--background-2: #292933;
 	--link-standard: #008bfc;
 	--link-active: #2952db;
+	--border: #e0e0eb26;
+	--subtext: #a8aab4;
+	--text: #fff;
+}
+
+* {
+	color: var(--text);
 }
 
 body {
-	background-color: #2f2f3b;
+	background-color: var(--background-1);
 	align-items: center;
 	justify-content: center;
 	display: flex;
@@ -50,6 +55,24 @@ a {
 
 	&:active {
 		color: var(--link-active);
+	}
+}
+
+hr {
+	border-color: var(--border);
+}
+
+button {
+	background-color: var(--background-1);
+	border: solid 1px var(--border);
+	border-radius: 3px;
+
+	&:hover {
+		background: var(--background-0);
+	}
+
+	&:active {
+		background: var(--background-2);
 	}
 }
 

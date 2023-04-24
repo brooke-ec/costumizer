@@ -16,8 +16,11 @@
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@solidjs/router": "^0.8.2",
     "greset": "^2.0.0",
+    "skinview3d": "3.0.0-alpha.1",
+    "solid-fa": "^0.2.0",
     "solid-js": "^1.6.10"
   }
 }

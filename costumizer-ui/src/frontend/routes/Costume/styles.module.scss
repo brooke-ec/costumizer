@@ -1,0 +1,18 @@
+$column-width: 300px;
+
+.grid {
+	flex-wrap: wrap;
+	display: flex;
+	gap: 15px;
+}
+
+.preview {
+	height: 350px;
+	flex-basis: $column-width;
+	flex-grow: 1;
+}
+
+.form {
+	flex-basis: $column-width;
+	flex-grow: 999999;
+}

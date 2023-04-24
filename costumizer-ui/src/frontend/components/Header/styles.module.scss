@@ -1,6 +1,7 @@
 @import "../../index.scss";
 
 header {
+	align-items: center;
 	padding: 8px 0;
 	display: flex;
 }
@@ -18,7 +19,7 @@ header {
 }
 
 .username {
-	color: #a8aab4;
+	color: var(--subtext);
 	font-size: 14px;
 	margin: 2px 0;
 }
@@ -30,4 +31,11 @@ header {
 .username.loading {
 	border-radius: 5px;
 	width: 100px;
+}
+
+.back {
+	color: var(--text) !important;
+	text-transform: uppercase;
+	font-size: 15px;
+	padding: 5px 10px;
 }

@@ -1,10 +1,12 @@
-$border: 1px solid #e0e0eb26;
+$border: 1px solid var(--border);
 
 .card {
-	border: $border;
 	flex-direction: column;
 	border-radius: 4px;
 	overflow: hidden;
+	border: $border;
+	height: inherit;
+	width: inherit;
 	display: flex;
 }
 

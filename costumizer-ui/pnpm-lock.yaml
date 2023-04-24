@@ -1,17 +1,23 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@fortawesome/free-solid-svg-icons': ^6.4.0
   '@solidjs/router': ^0.8.2
   greset: ^2.0.0
   sass: ^1.62.0
+  skinview3d: 3.0.0-alpha.1
+  solid-fa: ^0.2.0
   solid-js: ^1.6.10
   typescript: ^4.9.5
   vite: ^4.3.1
   vite-plugin-solid: ^2.5.0
 
 dependencies:
+  '@fortawesome/free-solid-svg-icons': 6.4.0
   '@solidjs/router': 0.8.2_solid-js@1.6.10
   greset: 2.0.0
+  skinview3d: 3.0.0-alpha.1
+  solid-fa: 0.2.0_solid-js@1.6.10
   solid-js: 1.6.10
 
 devDependencies:
@@ -535,6 +541,20 @@ packages:
     dev: true
     optional: true
 
+  /@fortawesome/fontawesome-common-types/6.4.0:
+    resolution: {integrity: sha512-HNii132xfomg5QVZw0HwXXpN22s7VBHQBv9CeOu9tfJnhsWQNd2lmTNi8CSrnw5B+5YOmzu1UoPAyxaXsJ6RgQ==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dev: false
+
+  /@fortawesome/free-solid-svg-icons/6.4.0:
+    resolution: {integrity: sha512-kutPeRGWm8V5dltFP1zGjQOEAzaLZj4StdQhWVZnfGFCvAPVvHh8qk5bRrU4KXnRRRNni5tKQI9PBAdI6MP8nQ==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.4.0
+    dev: false
+
   /@jridgewell/gen-mapping/0.1.1:
     resolution: {integrity: sha512-sQXCasFk+U8lWYEe66WxRDOE9PjVz4vSM51fTu3Hw+ClTpUSQb718772vH3pyS5pShp6lvQM7SxgIDXXXmOX7w==}
     engines: {node: '>=6.0.0'}
@@ -579,6 +599,20 @@ packages:
       solid-js: ^1.5.3
     dependencies:
       solid-js: 1.6.10
+    dev: false
+
+  /@types/offscreencanvas/2019.7.0:
+    resolution: {integrity: sha512-PGcyveRIpL1XIqK8eBsmRBt76eFgtzuPiSTyKHZxnGemp2yzGzWpjYKAfK3wIMiU7eH+851yEpiuP8JZerTmWg==}
+    dev: false
+
+  /@types/three/0.142.0:
+    resolution: {integrity: sha512-YNVnlqthfgqsxKuSNbT/G2r+ha/6x+aJm7kvjT+sxa4jUROw/KOPm5xzGj33sk1+Librg6NwH/wJ6LCDX33UZg==}
+    dependencies:
+      '@types/webxr': 0.5.1
+    dev: false
+
+  /@types/webxr/0.5.1:
+    resolution: {integrity: sha512-xlFXPfgJR5vIuDefhaHuUM9uUgvPaXB6GKdXy2gdEh8gBWQZ2ul24AJz3foUd8NNKlSTQuWYJpCb1/pL81m1KQ==}
     dev: false
 
   /ansi-styles/3.2.1:
@@ -928,6 +962,28 @@ packages:
     hasBin: true
     dev: true
 
+  /skinview-utils/0.7.0:
+    resolution: {integrity: sha512-ecbbUp0AuvZX5fCIOOwbNPxr/JIbrAGhCcdLcww0Ov9PbvAbeYjNDSIu1ebCJBe4CWc6ZYYn8MFNp68DDta0iQ==}
+    dependencies:
+      '@types/offscreencanvas': 2019.7.0
+    dev: false
+
+  /skinview3d/3.0.0-alpha.1:
+    resolution: {integrity: sha512-Y5v5yxQIVZZwpQlnRHeVZ9pgDOETLkPrkeMcwJN92OFAYQ0+WTHy6WlZOu0M1DRys+h8iyBdxRb/9976ftt72Q==}
+    dependencies:
+      '@types/three': 0.142.0
+      skinview-utils: 0.7.0
+      three: 0.142.0
+    dev: false
+
+  /solid-fa/0.2.0_solid-js@1.6.10:
+    resolution: {integrity: sha512-Mi8aOKZ+GJ2VgchwlV3SVrQPwpcDh1kuXdMCbQ0AlxBI9W36FaxTMOUrZenU6Ua/p04EcRfHLT4AfOx7xJSF3Q==}
+    peerDependencies:
+      solid-js: ^1.0.0
+    dependencies:
+      solid-js: 1.6.10
+    dev: false
+
   /solid-js/1.6.10:
     resolution: {integrity: sha512-Sf0e6PQCEFkFtbPq0L+93Ua81YQOefBEbvDJ0YXT92b6Lzw0k7UvzSd2l1BbYM+yzE3UmepU1tyMDc/3nIByjA==}
     dependencies:
@@ -955,6 +1011,10 @@ packages:
     dependencies:
       has-flag: 3.0.0
     dev: true
+
+  /three/0.142.0:
+    resolution: {integrity: sha512-ESjPO+3geFr+ZUfVMpMnF/eVU2uJPOh0e2ZpMFqjNca1wApS9lJb7E4MjwGIczgt9iuKd8PEm6Pfgp2bJ92Xtg==}
+    dev: false
 
   /to-fast-properties/2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
