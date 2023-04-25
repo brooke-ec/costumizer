@@ -63,3 +63,13 @@ def get_costume_info(uuid: str, name: str) -> CostumeInfoType:
         if c is None:
             raise NoRecordError("Could not find costume.")
         return {"name": c[0], "display": c[1], "hash": c[2], "slim": bool(c[3])}
+
+
+def get_costume_existence(uuid: str, name: str) -> bool:
+    with connect() as cur:
+        cur.execute(
+            """SELECT c.name FROM costume c WHERE c.owner = %s AND c.name = %s""",
+            (uuid, name),
+        )
+        c = cur.fetchone()
+        return c is not None

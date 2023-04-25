@@ -1,13 +1,6 @@
 import { Portal, Show } from "solid-js/web";
 import styles from "./styles.module.scss";
-import {
-	createContext,
-	useContext,
-	JSX,
-	createSignal,
-	Setter,
-	Accessor,
-} from "solid-js";
+import { createContext, useContext, JSX, createSignal, Setter, Accessor } from "solid-js";
 
 function makeModalContext(stack?: {
 	stack: Accessor<JSX.Element[]>;
@@ -30,7 +23,7 @@ function makeModalContext(stack?: {
 const ModalContext = createContext(makeModalContext());
 
 export function ModalProvider(props: { children: any }) {
-	const [stack, setStack] = createSignal<JSX.Element[]>([]);
+	const [stack, setStack] = createSignal<JSX.Element[]>(new Array());
 
 	return (
 		<ModalContext.Provider value={makeModalContext({ stack, setStack })}>

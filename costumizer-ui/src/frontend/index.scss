@@ -2,11 +2,18 @@ html {
 	--background-0: #383846;
 	--background-1: #2f2f3b;
 	--background-2: #292933;
-	--link-standard: #008bfc;
+	--background-3: #24242b;
+	--link-default: #008bfc;
 	--link-active: #2952db;
 	--border: #e0e0eb26;
 	--subtext: #a8aab4;
 	--text: #fff;
+	--red-0: #ce3136;
+	--red-1: #bd2a2f;
+	--red-2: #a52125;
+	--green-0: #24aa5c;
+	--green-1: #187940;
+	--green-2: #156d3a;
 }
 
 * {
@@ -46,7 +53,7 @@ code {
 }
 
 a {
-	color: var(--link-standard);
+	color: var(--link-default);
 	text-decoration: none;
 
 	&:hover {
@@ -60,20 +67,67 @@ a {
 
 hr {
 	border-color: var(--border);
+	width: 100%;
 }
 
 button {
-	background-color: var(--background-1);
+	--default-color: var(--background-1);
+	--hover-color: var(--background-0);
+	--active-color: var(--background-2);
+
+	background-color: var(--default-color);
 	border: solid 1px var(--border);
+	padding-bottom: 0.2em;
 	border-radius: 3px;
 
 	&:hover {
-		background: var(--background-0);
+		background: var(--hover-color);
 	}
 
 	&:active {
-		background: var(--background-2);
+		background: var(--active-color);
 	}
+
+	&.danger {
+		--hover-color: var(--red-0);
+		--active-color: var(--red-1);
+	}
+
+	&.red {
+		--default-color: var(--red-0);
+		--hover-color: var(--red-1);
+		--active-color: var(--red-2);
+	}
+
+	&.green {
+		--default-color: var(--green-0);
+		--hover-color: var(--green-1);
+		--active-color: var(--green-2);
+	}
+}
+
+input[type="text"],
+input:not([type]) {
+	background-color: var(--background-2);
+	border: solid 1px var(--border);
+	border-radius: 3px;
+	padding: 2px 4px;
+	width: 100%;
+
+	&:focus-visible {
+		outline: solid 1px var(--text);
+	}
+
+	&:invalid {
+		outline: solid 2px var(--red-0);
+	}
+}
+
+label {
+	text-transform: lowercase;
+	font-variant: small-caps;
+	display: block;
+	margin-bottom: 5px;
 }
 
 @mixin shimmer($width: 100px) {

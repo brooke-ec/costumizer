@@ -21,3 +21,7 @@ export type CostumeInfoType = {
 export async function fetchCostumeInfo(name: string) {
 	return await request<CostumeInfoType>("/api/costume/info/" + name);
 }
+
+export async function fetchCostumeExistence(name: string) {
+	return await request<{ exists: boolean }>("/api/costume/exists/" + name);
+}

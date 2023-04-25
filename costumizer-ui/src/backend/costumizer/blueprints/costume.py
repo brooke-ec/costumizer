@@ -1,10 +1,15 @@
-from costumizer.database import get_costumes_list, get_costume_info, CostumesListType
 from costumizer.config import RENDERER_URL_BASE, TEXTURE_URL_BASE
 from costumizer.errors import NoRecordError
 from mysql.connector import DatabaseError
 from costumizer.auth import get_uuid
 from flask import Blueprint, abort
 import urllib.parse as urlparse
+from costumizer.database import (
+    get_costumes_list,
+    get_costume_info,
+    get_costume_existence,
+    CostumesListType,
+)
 
 costume = Blueprint("costume", __name__)
 
@@ -42,3 +47,13 @@ def costume_info(name: str):
             "slim": info["slim"],
         },
     }
+
+
+@costume.get("/exists/<name>")
+def costume_exists(name: str):
+    uuid = get_uuid()
+    try:
+        result = get_costume_existence(uuid, name)
+    except DatabaseError as e:
+        abort(500, f"Database Error: {e.errno}")
+    return {"exists": result}

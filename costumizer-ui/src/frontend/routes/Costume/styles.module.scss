@@ -14,5 +14,23 @@ $column-width: 300px;
 
 .form {
 	flex-basis: $column-width;
+	flex-direction: column;
 	flex-grow: 999999;
+	display: flex;
+}
+
+.input {
+	font-size: 18px;
+	margin-bottom: 20px;
+}
+
+.controls {
+	align-self: flex-end;
+	margin-top: auto;
+
+	button {
+		margin: 0 5px;
+		height: 35px;
+		width: 80px;
+	}
 }

@@ -1,0 +1,33 @@
+div.no_margin {
+	margin-bottom: 0;
+}
+
+.tooltip_container {
+	justify-content: center;
+	display: flex;
+	width: 100%;
+}
+
+.tooltip {
+	background-color: var(--background-3);
+	box-shadow: 2px 2px 2px #00000093;
+	margin: 15px 0 5px 0;
+	position: relative;
+	border-radius: 5px;
+	width: fit-content;
+	padding: 5px 10px;
+
+	&::before {
+		content: "";
+		border-color: var(--background-3) transparent;
+		border-width: 0 10px 10px;
+		border-style: solid;
+		position: absolute;
+		margin-left: -10px;
+		display: block;
+		width: 0;
+		z-index: 1;
+		top: -10px;
+		left: 50%;
+	}
+}
