@@ -1,9 +1,11 @@
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { Accessor, createMemo } from "solid-js";
 
+export type ValueTypes = string | number | boolean | null;
+
 export type FormInput = {
 	valid: () => boolean;
-	value: () => string;
+	value: () => ValueTypes;
 };
 
 type FormInputs = { [name: string]: FormInput };
@@ -28,7 +30,7 @@ export default class Form {
 	}
 
 	value() {
-		const result: { [name: string]: string } = {};
+		const result: { [name: string]: ValueTypes } = {};
 		Object.entries(this.inputs).forEach(([name, input]) => (result[name] = input.value()));
 		return result;
 	}

@@ -7,9 +7,11 @@ import styles from "./styles.module.scss";
 import NotFound from "../error/NotFound";
 import Input from "../../components/Input";
 import Form from "../../utils/Form";
+import RadioButton from "../../components/RadioButton";
 
 export default function Costume() {
 	const [info, { refetch }] = createResource(() => useParams().name, fetchCostumeInfo);
+	const [ovrSlim, setOvrSlim] = createSignal<boolean>();
 	const [loading, setLoading] = createSignal(false);
 	const form = new Form();
 
@@ -18,6 +20,11 @@ export default function Costume() {
 			pattern: /^[a-zA-Z0-9_]*$/,
 			message: "Field must contain only alphanumeric characters and underscores.",
 		},
+	];
+
+	const options = [
+		{ label: "Classic", value: false },
+		{ label: "Slim", value: true },
 	];
 
 	async function validateNameUnique(value: string) {
@@ -41,33 +48,51 @@ export default function Costume() {
 					<div class={styles.grid}>
 						<div class={styles.preview}>
 							<SkinPreview
+								slim={ovrSlim() ?? info()!.data!.skin.slim}
 								src={info()!.data!.skin.url}
-								slim={info()!.data!.skin.slim}
 							/>
 						</div>
 						<div class={styles.form}>
-							<label for="name">Name</label>
-							<Input
-								required
-								form={form}
-								name="name"
-								maxlength="32"
-								class={styles.input}
-								validators={validators}
-								value={info()!.data?.name}
-								validator={validateNameUnique}
-							/>
-							<label for="display">Display Name</label>
-							<Input
-								required
-								form={form}
-								minlength="3"
-								name="display"
-								maxlength="16"
-								class={styles.input}
-								validators={validators}
-								value={info()!.data?.display}
-							/>
+							<div class={styles.field}>
+								<label class="smallcaps">Name</label>
+								<Input
+									required
+									form={form}
+									name="name"
+									maxlength="32"
+									class={styles.input}
+									validators={validators}
+									value={info()!.data?.name}
+									validator={validateNameUnique}
+								/>
+							</div>
+							<div class={styles.field}>
+								<label class="smallcaps">Display Name</label>
+								<Input
+									required
+									form={form}
+									minlength="3"
+									name="display"
+									maxlength="16"
+									class={styles.input}
+									validators={validators}
+									value={info()!.data?.display}
+								/>
+							</div>
+							<div class={styles.field}>
+								<label class="smallcaps">Player Model</label>
+								<RadioButton
+									form={form}
+									name="model"
+									options={options}
+									onUpdate={setOvrSlim}
+									value={info()!.data!.skin.slim}
+								/>
+							</div>
+							<div class={styles.field}>
+								<label class="smallcaps">Skin File</label>
+								<button class={styles.browse}>Browse</button>
+							</div>
 							<div class={styles.controls}>
 								<button class="danger">Delete</button>
 								<LoadingButton

@@ -129,10 +129,13 @@ input:not([type]) {
 }
 
 label {
+	margin-bottom: 5px;
+	display: block;
+}
+
+.smallcaps {
 	text-transform: lowercase;
 	font-variant: small-caps;
-	display: block;
-	margin-bottom: 5px;
 }
 
 @mixin shimmer($width: 100px) {

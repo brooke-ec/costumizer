@@ -1,0 +1,38 @@
+.container {
+	display: flex;
+	gap: 25px;
+}
+
+.option {
+	cursor: pointer;
+
+	label {
+		cursor: inherit;
+		float: right;
+	}
+}
+
+.check {
+	background-color: transparent;
+	border: solid 2px transparent;
+	background-clip: padding-box;
+	display: inline-block;
+	--color: var(--text);
+	outline: solid 1px var(--color);
+	margin-bottom: -2px;
+	border-radius: 50%;
+	margin-right: 8px;
+	height: 15px;
+	width: 15px;
+
+	&.checked {
+		--color: var(--green-0);
+		background-color: var(--color);
+	}
+}
+
+.option:hover .check:not(.checked) {
+	$hover-color: #ffffff3d;
+	background-color: $hover-color;
+	border-color: $hover-color;
+}
