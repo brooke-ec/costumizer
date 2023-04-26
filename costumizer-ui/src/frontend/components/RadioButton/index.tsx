@@ -8,7 +8,7 @@ export type RadioButtonOption = {
 };
 
 export default function RadioButton(props: {
-	onUpdate?: (value: ValueTypes) => void;
+	onChange?: (value: ValueTypes) => void;
 	options: RadioButtonOption[];
 	value: ValueTypes;
 	name: string;
@@ -21,7 +21,7 @@ export default function RadioButton(props: {
 	}
 
 	function click(value: ValueTypes) {
-		if (props.onUpdate) props.onUpdate(value);
+		if (props.onChange) props.onChange(value);
 		setValue(value);
 	}
 

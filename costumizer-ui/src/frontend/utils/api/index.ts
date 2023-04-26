@@ -1,4 +1,4 @@
-import UnexpectedError from "../../modals/UnexpectedError";
+import UnexpectedError from "../../routes/system/UnexpectedError";
 import { useIdentity } from "../../components/Identity";
 import { useModal } from "../../components/Modal";
 
@@ -31,7 +31,7 @@ export async function request<T>(
 			throw new Error(json.error);
 		case 500:
 			json = await response.json();
-			modal.open(UnexpectedError());
+			modal.open(UnexpectedError);
 			throw new Error(json.error);
 		default:
 			return {

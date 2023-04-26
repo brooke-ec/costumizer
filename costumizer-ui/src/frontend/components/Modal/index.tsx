@@ -2,12 +2,14 @@ import { Portal, Show } from "solid-js/web";
 import styles from "./styles.module.scss";
 import { createContext, useContext, JSX, createSignal, Setter, Accessor } from "solid-js";
 
+export type ModalFactory = () => JSX.Element;
+
 function makeModalContext(stack?: {
-	stack: Accessor<JSX.Element[]>;
-	setStack: Setter<JSX.Element[]>;
+	stack: Accessor<ModalFactory[]>;
+	setStack: Setter<ModalFactory[]>;
 }) {
 	return {
-		open(content: JSX.Element) {
+		open(content: ModalFactory) {
 			if (!stack) throw new Error("Context not found.");
 			stack.setStack([content, ...stack.stack()]);
 		},
@@ -23,7 +25,7 @@ function makeModalContext(stack?: {
 const ModalContext = createContext(makeModalContext());
 
 export function ModalProvider(props: { children: any }) {
-	const [stack, setStack] = createSignal<JSX.Element[]>(new Array());
+	const [stack, setStack] = createSignal<ModalFactory[]>(new Array());
 
 	return (
 		<ModalContext.Provider value={makeModalContext({ stack, setStack })}>
@@ -31,7 +33,7 @@ export function ModalProvider(props: { children: any }) {
 				<Portal>
 					<div class={styles.blur} />
 					<div class={styles.positioner}>
-						<div>{stack()[0]}</div>
+						<div>{stack()[0]()}</div>
 					</div>
 				</Portal>
 			</Show>

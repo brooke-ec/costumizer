@@ -4,14 +4,16 @@ import LoadingButton from "../../components/LoadingButton";
 import SkinPreview from "../../components/SkinPreview";
 import { useParams } from "@solidjs/router";
 import styles from "./styles.module.scss";
-import NotFound from "../error/NotFound";
+import NotFound from "../system/NotFound";
 import Input from "../../components/Input";
 import Form from "../../utils/Form";
 import RadioButton from "../../components/RadioButton";
+import SkinBrowser from "./SkinBrowser";
 
 export default function Costume() {
 	const [info, { refetch }] = createResource(() => useParams().name, fetchCostumeInfo);
-	const [ovrSlim, setOvrSlim] = createSignal<boolean>();
+	const [newSlim, setNewSlim] = createSignal<boolean>();
+	const [newSkin, setNewSkin] = createSignal<string>();
 	const [loading, setLoading] = createSignal(false);
 	const form = new Form();
 
@@ -48,8 +50,8 @@ export default function Costume() {
 					<div class={styles.grid}>
 						<div class={styles.preview}>
 							<SkinPreview
-								slim={ovrSlim() ?? info()!.data!.skin.slim}
-								src={info()!.data!.skin.url}
+								slim={newSlim() ?? info()!.data!.skin.slim}
+								src={newSkin() ?? info()!.data!.skin.url}
 							/>
 						</div>
 						<div class={styles.form}>
@@ -85,13 +87,13 @@ export default function Costume() {
 									form={form}
 									name="model"
 									options={options}
-									onUpdate={setOvrSlim}
+									onChange={setNewSlim}
 									value={info()!.data!.skin.slim}
 								/>
 							</div>
 							<div class={styles.field}>
 								<label class="smallcaps">Skin File</label>
-								<button class={styles.browse}>Browse</button>
+								<SkinBrowser onChange={setNewSkin} />
 							</div>
 							<div class={styles.controls}>
 								<button class="danger">Delete</button>
