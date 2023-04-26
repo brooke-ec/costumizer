@@ -1,14 +1,17 @@
 import { fetchCostumeExistence, fetchCostumeInfo } from "../../utils/api/costume";
-import { Match, Show, Switch, createResource } from "solid-js";
+import { Match, Show, Switch, createResource, createSignal } from "solid-js";
+import LoadingButton from "../../components/LoadingButton";
 import SkinPreview from "../../components/SkinPreview";
 import { useParams } from "@solidjs/router";
 import styles from "./styles.module.scss";
 import NotFound from "../error/NotFound";
 import Input from "../../components/Input";
+import Form from "../../utils/Form";
 
 export default function Costume() {
 	const [info, { refetch }] = createResource(() => useParams().name, fetchCostumeInfo);
-	let form: HTMLFormElement | undefined;
+	const [loading, setLoading] = createSignal(false);
+	const form = new Form();
 
 	const validators = [
 		{
@@ -19,15 +22,11 @@ export default function Costume() {
 
 	async function validateNameUnique(value: string) {
 		if (info()!.data!.name == value) return;
+		setLoading(true);
 		const response = await fetchCostumeExistence(value);
+		setLoading(false);
 		if (!response.data!.exists) return;
 		return "There is already a costume registered with this name.";
-	}
-
-	function submit(e: Event) {
-		const fd = new FormData(form);
-		for (const [key, value] of fd) console.log(`${key}: ${value}\n`);
-		e.preventDefault();
 	}
 
 	return (
@@ -46,10 +45,11 @@ export default function Costume() {
 								slim={info()!.data!.skin.slim}
 							/>
 						</div>
-						<form ref={form} class={styles.form} onSubmit={submit}>
+						<div class={styles.form}>
 							<label for="name">Name</label>
 							<Input
 								required
+								form={form}
 								name="name"
 								maxlength="32"
 								class={styles.input}
@@ -60,6 +60,7 @@ export default function Costume() {
 							<label for="display">Display Name</label>
 							<Input
 								required
+								form={form}
 								minlength="3"
 								name="display"
 								maxlength="16"
@@ -69,11 +70,15 @@ export default function Costume() {
 							/>
 							<div class={styles.controls}>
 								<button class="danger">Delete</button>
-								<button class="green" type="submit">
+								<LoadingButton
+									class="green"
+									loading={loading()}
+									disabled={!form.valid()}
+								>
 									Save
-								</button>
+								</LoadingButton>
 							</div>
-						</form>
+						</div>
 					</div>
 				</Match>
 			</Switch>

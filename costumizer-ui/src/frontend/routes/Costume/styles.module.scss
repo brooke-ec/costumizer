@@ -27,6 +27,7 @@ $column-width: 300px;
 .controls {
 	align-self: flex-end;
 	margin-top: auto;
+	display: flex;
 
 	button {
 		margin: 0 5px;

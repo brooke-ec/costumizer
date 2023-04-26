@@ -80,12 +80,17 @@ button {
 	padding-bottom: 0.2em;
 	border-radius: 3px;
 
-	&:hover {
+	&:hover:not(:disabled) {
 		background: var(--hover-color);
 	}
 
-	&:active {
+	&:active:not(:disabled) {
 		background: var(--active-color);
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		color: #ffffff7c;
 	}
 
 	&.danger {

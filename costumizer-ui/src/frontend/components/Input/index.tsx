@@ -1,5 +1,6 @@
 import { Show, createMemo, createSignal } from "solid-js";
 import styles from "./styles.module.scss";
+import Form from "../../utils/Form";
 
 export type Validator = {
 	pattern: RegExp;
@@ -8,7 +9,8 @@ export type Validator = {
 };
 
 export default function Input(props: {
-	name?: string;
+	form?: Form;
+	name: string;
 	class?: string;
 	value?: string;
 	required?: boolean;
@@ -17,8 +19,15 @@ export default function Input(props: {
 	minlength?: number | string;
 	validator?: (value: string) => string | void | Promise<string | void>;
 }) {
-	let input: HTMLInputElement | undefined;
 	const [message, setMessage] = createSignal<string | undefined>();
+	let input: HTMLInputElement | undefined;
+
+	if (props.form) {
+		props.form.register(props.name, {
+			valid: () => message() === undefined,
+			value: () => input!.value,
+		});
+	}
 
 	const validators = createMemo(() => {
 		const result: Validator[] = new Array();
