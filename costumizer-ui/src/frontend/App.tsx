@@ -1,7 +1,7 @@
 import Unauthorized from "./routes/system/Unauthorized";
 import { Routes, Route } from "@solidjs/router";
 import NotFound from "./routes/system/NotFound";
-import Header from "./components/Header";
+import Header from "./global/Header";
 import Login from "./routes/system/Login";
 import Library from "./routes/Library";
 import Costume from "./routes/Costume";

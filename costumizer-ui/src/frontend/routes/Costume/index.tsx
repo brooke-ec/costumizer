@@ -1,14 +1,14 @@
 import { fetchCostumeExistence, fetchCostumeInfo } from "../../utils/api/costume";
 import { Match, Show, Switch, createResource, createSignal } from "solid-js";
-import LoadingButton from "../../components/LoadingButton";
-import SkinPreview from "../../components/SkinPreview";
+import LoadingButton from "../../global/LoadingButton";
+import SkinPreview from "../../global/SkinPreview";
+import RadioButton from "../../global/RadioButton";
 import { useParams } from "@solidjs/router";
+import Input from "../../global/Input";
 import styles from "./styles.module.scss";
 import NotFound from "../system/NotFound";
-import Input from "../../components/Input";
-import Form from "../../utils/Form";
-import RadioButton from "../../components/RadioButton";
 import SkinBrowser from "./SkinBrowser";
+import Form from "../../utils/Form";
 
 export default function Costume() {
 	const [info, { refetch }] = createResource(() => useParams().name, fetchCostumeInfo);
@@ -36,6 +36,10 @@ export default function Costume() {
 		setLoading(false);
 		if (!response.data!.exists) return;
 		return "There is already a costume registered with this name.";
+	}
+
+	async function submit() {
+		console.log(form.value());
 	}
 
 	return (
@@ -85,7 +89,7 @@ export default function Costume() {
 								<label class="smallcaps">Player Model</label>
 								<RadioButton
 									form={form}
-									name="model"
+									name="slim"
 									options={options}
 									onChange={setNewSlim}
 									value={info()!.data!.skin.slim}
@@ -99,6 +103,7 @@ export default function Costume() {
 								<button class="danger">Delete</button>
 								<LoadingButton
 									class="green"
+									onClick={submit}
 									loading={loading()}
 									disabled={!form.valid()}
 								>

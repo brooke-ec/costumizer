@@ -1,4 +1,4 @@
-import { useIdentity } from "../../components/Identity";
+import { useIdentity } from "../../global/Identity";
 import { useNavigate } from "@solidjs/router";
 import styles from "./styles.module.scss";
 
@@ -12,8 +12,8 @@ export default function Unauthorized() {
 		<>
 			<h1 class={styles.title}>Unauthorized</h1>
 			<p>
-				Please log in by following the link returned by the{" "}
-				<code>/costumizer ui</code> command in-game.
+				Please log in by following the link returned by the <code>/costumizer ui</code>{" "}
+				command in-game.
 			</p>
 		</>
 	);

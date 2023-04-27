@@ -1,6 +1,6 @@
 import UnexpectedError from "../../routes/system/UnexpectedError";
-import { useIdentity } from "../../components/Identity";
-import { useModal } from "../../components/Modal";
+import { useIdentity } from "../../global/Identity";
+import { useModal } from "../../global/Modal";
 
 export type ResponseData<T> = {
 	status: number;

@@ -1,7 +1,7 @@
 import { fetchCostumes } from "../../utils/api/costume";
 import { For, Show, createResource } from "solid-js";
 import styles from "./styles.module.scss";
-import Card from "../../components/Card";
+import Card from "../../global/Card";
 
 export default function Library() {
 	const [costumes] = createResource(fetchCostumes);

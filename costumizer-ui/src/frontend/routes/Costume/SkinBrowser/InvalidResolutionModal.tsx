@@ -1,7 +1,7 @@
-import { useModal } from "../../../components/Modal";
+import { useModal } from "../../../global/Modal";
 import styles from "./styles.module.scss";
 
-export default function InvalidSizeModal() {
+export default function InvalidResolutionModal() {
 	const modal = useModal();
 
 	return (

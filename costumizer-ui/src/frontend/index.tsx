@@ -1,6 +1,6 @@
 /* @refresh reload */
-import { ModalProvider } from "./components/Modal";
-import Identity from "./components/Identity";
+import { ModalProvider } from "./global/Modal";
+import Identity from "./global/Identity";
 import { Router } from "@solidjs/router";
 import { render } from "solid-js/web";
 
