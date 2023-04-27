@@ -26,6 +26,7 @@ def connect():
     with mysql.connector.connect(pool_name=POOL_NAME) as conn:
         with conn.cursor() as cur:
             yield cur
+        conn.commit()
 
 
 class CostumesListType(TypedDict):
@@ -73,3 +74,29 @@ def get_costume_existence(uuid: str, name: str) -> bool:
         )
         c = cur.fetchone()
         return c is not None
+
+
+class SkinType(TypedDict):
+    slim: bool
+    hash: str
+
+
+def get_costume_skin(uuid: str, name: str) -> SkinType:
+    with connect() as cur:
+        cur.execute(
+            """SELECT s.hash, s.slim FROM costume c
+        INNER JOIN skin s ON c.skin = s.hash WHERE c.owner = %s AND c.name = %s""",
+            (uuid, name),
+        )
+        c = cur.fetchone()
+        if c is None:
+            raise NoRecordError("Could not find costume.")
+        return {"hash": c[0], "slim": bool(c[1])}
+
+
+def update_costume(uuid: str, name: str, new_name: str, skin: str, display: str):
+    with connect() as cur:
+        cur.execute(
+            "UPDATE costume SET name=%s, skin=%s, display=%s WHERE owner=%s AND name=%s",
+            (new_name, skin, display, uuid, name),
+        )

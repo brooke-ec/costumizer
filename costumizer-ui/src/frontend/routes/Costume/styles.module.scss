@@ -1,5 +1,10 @@
 $column-width: 300px;
 
+.title {
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
 .grid {
 	flex-wrap: wrap;
 	display: flex;

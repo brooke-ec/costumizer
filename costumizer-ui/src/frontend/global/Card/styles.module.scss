@@ -13,8 +13,10 @@ $border: 1px solid var(--border);
 .title {
 	border-bottom: $border;
 	background-color: #393946;
+	text-overflow: ellipsis;
 	padding: 0 5px 4px 5px;
 	text-align: center;
+	overflow: hidden;
 }
 
 .card.reverse {

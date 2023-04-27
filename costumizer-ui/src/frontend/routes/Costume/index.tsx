@@ -1,20 +1,25 @@
-import { fetchCostumeExistence, fetchCostumeInfo } from "../../utils/api/costume";
+import { fetchCostumeExistence, fetchCostumeInfo, updateCostume } from "../../utils/api/costume";
 import { Match, Show, Switch, createResource, createSignal } from "solid-js";
+import { useNavigate, useParams } from "@solidjs/router";
 import LoadingButton from "../../global/LoadingButton";
+import LoadingModal from "../../global/LoadingModal";
+import Form, { ValueTypes } from "../../utils/Form";
 import SkinPreview from "../../global/SkinPreview";
 import RadioButton from "../../global/RadioButton";
-import { useParams } from "@solidjs/router";
-import Input from "../../global/Input";
+import { useModal } from "../../global/Modal";
 import styles from "./styles.module.scss";
 import NotFound from "../system/NotFound";
+import UnsuccessfulSaveModal from "./UnsuccessfulSaveModal";
 import SkinBrowser from "./SkinBrowser";
-import Form from "../../utils/Form";
+import Input from "../../global/Input";
 
 export default function Costume() {
 	const [info, { refetch }] = createResource(() => useParams().name, fetchCostumeInfo);
+	const [newSkin, setNewSkin] = createSignal<string | null>(null);
 	const [newSlim, setNewSlim] = createSignal<boolean>();
-	const [newSkin, setNewSkin] = createSignal<string>();
 	const [loading, setLoading] = createSignal(false);
+	const navigate = useNavigate();
+	const modal = useModal();
 	const form = new Form();
 
 	const validators = [
@@ -39,7 +44,14 @@ export default function Costume() {
 	}
 
 	async function submit() {
-		console.log(form.value());
+		modal.open(LoadingModal);
+		const data: { [name: string]: ValueTypes } = { ...form.value(), skin: newSkin() };
+		const response = await updateCostume(info()!.data!.name, data);
+		modal.close();
+
+		if (response.status != 200!)
+			modal.open(() => UnsuccessfulSaveModal({ message: response.data?.error }));
+		else if (info()!.data!.name != data.name) navigate(`../${data.name}`);
 	}
 
 	return (
@@ -49,7 +61,7 @@ export default function Costume() {
 					<NotFound />
 				</Match>
 				<Match when={info()!.status == 200}>
-					<h1>{info()!.data!.name}</h1>
+					<h1 class={styles.title}>{info()!.data!.name}</h1>
 					<hr />
 					<div class={styles.grid}>
 						<div class={styles.preview}>

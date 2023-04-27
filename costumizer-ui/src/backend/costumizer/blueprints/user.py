@@ -14,7 +14,7 @@ PROFILE_BASE = r"https://sessionserver.mojang.com/session/minecraft/profile/"
 user = Blueprint("user", __name__)
 
 
-@user.get("/info/")
+@user.get("/info")
 def user_info():
     uuid = get_uuid()
     url = urlparse.urljoin(PROFILE_BASE, uuid)

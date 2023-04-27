@@ -1,0 +1,17 @@
+.modal {
+	background-color: var(--background-1);
+	flex-direction: column;
+	border-radius: 5px;
+	padding: 10px;
+	width: 50vw;
+}
+
+.controls {
+	justify-content: end;
+	display: flex;
+	width: 100%;
+}
+
+.close {
+	padding: 5px 20px;
+}

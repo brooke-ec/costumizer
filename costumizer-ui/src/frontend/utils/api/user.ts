@@ -7,5 +7,5 @@ export type UserInfoType = {
 };
 
 export async function fetchUserInfo() {
-	return await request<UserInfoType>("/api/user/info/");
+	return await request<UserInfoType>("/api/user/info");
 }

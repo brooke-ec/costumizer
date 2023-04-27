@@ -5,6 +5,7 @@ import json
 error = Blueprint("errors", __name__)
 
 
+@error.app_errorhandler(400)
 @error.app_errorhandler(404)
 @error.app_errorhandler(500)
 @error.app_errorhandler(403)
