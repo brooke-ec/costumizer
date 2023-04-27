@@ -28,6 +28,8 @@ def get_body(type: Type[T]) -> T:
 def check_typing(type: Type[T], data: dict) -> T:
     result = {}
     for name, type in get_type_hints(type).items():
+        if name not in data:
+            abort(400, f"Required property '{name}' was omitted")
         value = data[name]
         result[name] = value
         if type is Any:

@@ -1,3 +1,4 @@
+from costumizer.skins import get_skin_from_base64, get_skin_from_hash
 from costumizer.config import RENDERER_URL_BASE, TEXTURE_URL_BASE
 from costumizer.utils import get_parameter, get_body
 from costumizer.errors import NoRecordError
@@ -6,6 +7,7 @@ from flask import Blueprint, abort
 import costumizer.database as db
 import urllib.parse as urlparse
 from typing import TypedDict
+import re
 
 costume = Blueprint("costume", __name__)
 
@@ -16,7 +18,7 @@ def list_costumes():
     costumes = db.get_costumes_list(uuid)
 
     def generate(c: db.CostumesListType):
-        params = {"hash": c["hash"], "slim": str(c["slim"]).lower(), "scale": 5}
+        params = {"hash": c["resource"], "slim": str(c["slim"]).lower(), "scale": 5}
         url = f"{RENDERER_URL_BASE}?{urlparse.urlencode(params)}"
         return {"name": c["name"], "preview": url}
 
@@ -35,7 +37,7 @@ def costume_info():
         "name": info["name"],
         "display": info["display"],
         "skin": {
-            "url": urlparse.urljoin(TEXTURE_URL_BASE, info["hash"]),
+            "url": urlparse.urljoin(TEXTURE_URL_BASE, info["resource"]),
             "slim": info["slim"],
         },
     }
@@ -45,6 +47,7 @@ def costume_info():
 def costume_exists():
     name = get_parameter("name")
     uuid = get_uuid()
+    print(name)
     result = db.get_costume_existence(uuid, name)
     return {"exists": result}
 
@@ -56,16 +59,35 @@ class SaveBodyType(TypedDict):
     name: str
 
 
+RE_NAME = re.compile(r"^[\w\d_]{1,32}$")
+RE_DISPLAY = re.compile(r"^[\w\d_]{3,16}$")
+
+
 @costume.post("/update")
 def update_costume():
     name = get_parameter("name")
     body = get_body(SaveBodyType)
     uuid = get_uuid()
 
+    if RE_NAME.match(body["name"]) is None:
+        abort(400, "Name field is invalid.")
+    if RE_DISPLAY.match(body["display"]) is None:
+        abort(400, "Display field is invalid.")
+
     try:
         skin_info = db.get_costume_skin(uuid, name)
     except NoRecordError:
         abort(404, f"Could not find costume: {name}")
 
-    db.update_costume(uuid, name, body["name"], skin_info["hash"], body["display"])
+    if body["skin"] is None:
+        if body["slim"] == skin_info["slim"]:
+            skin = skin_info["id"]
+        else:
+            skin = get_skin_from_hash(
+                skin_info["hash"], body["slim"], skin_info["resource"]
+            )
+    else:
+        skin = get_skin_from_base64(body["skin"], body["slim"])
+
+    db.update_costume(uuid, name, body["name"], skin, body["display"])
     return {"successful": True}

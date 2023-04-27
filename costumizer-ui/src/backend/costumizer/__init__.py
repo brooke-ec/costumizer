@@ -1,9 +1,7 @@
 from costumizer.blueprints import user, error, costume
 from costumizer.database import setup_pool
-from costumizer.config import CONFIG_PATH
 from costumizer.auth import get_secret
 import flask
-import json
 
 
 def create_app() -> flask.Flask:

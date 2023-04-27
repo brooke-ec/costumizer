@@ -13,7 +13,9 @@ def get_required(key: str) -> str:
     return value
 
 
-CONFIG_PATH = os.environ.get("CONFIG_PATH", "config.json")
+MINESKIN_URL_BASE = r"https://api.mineskin.org/generate/"
+MINESKIN_API_KEY = get_required("MINESKIN_API_KEY")
+
 TEXTURE_URL_BASE = r"https://textures.minecraft.net/texture/"
 RENDERER_URL_BASE = get_required("RENDERER_URL_BASE")
 

@@ -37,39 +37,41 @@ def connect():
 
 class CostumesListType(TypedDict):
     name: str
-    hash: str
+    resource: str
     slim: bool
 
 
 def get_costumes_list(uuid: str) -> list[CostumesListType]:
     with connect() as cur:
         cur.execute(
-            """SELECT c.name, s.hash, s.slim FROM costume c
-            INNER JOIN skin s ON c.skin = s.hash WHERE c.owner = %s
+            """SELECT c.name, s.resource, s.slim FROM costume c
+            INNER JOIN skin s ON c.skin = s.id WHERE c.owner = %s
             ORDER BY c.name""",
             (uuid,),
         )
-        return [{"name": c[0], "hash": c[1], "slim": bool(c[2])} for c in cur.fetchall()]
+        return [
+            {"name": c[0], "resource": c[1], "slim": bool(c[2])} for c in cur.fetchall()
+        ]
 
 
 class CostumeInfoType(TypedDict):
     display: str
     slim: bool
     name: str
-    hash: str
+    resource: str
 
 
 def get_costume_info(uuid: str, name: str) -> CostumeInfoType:
     with connect() as cur:
         cur.execute(
-            """SELECT c.name, c.display, s.hash, s.slim FROM costume c
-        INNER JOIN skin s ON c.skin = s.hash WHERE c.owner = %s AND c.name = %s""",
+            """SELECT c.name, c.display, s.resource, s.slim FROM costume c
+        INNER JOIN skin s ON c.skin = s.id WHERE c.owner = %s AND c.name = %s""",
             (uuid, name),
         )
-        c = cur.fetchone()
-        if c is None:
-            raise NoRecordError("Could not find costume.")
-        return {"name": c[0], "display": c[1], "hash": c[2], "slim": bool(c[3])}
+        d = cur.fetchone()
+        if d is None:
+            raise NoRecordError()
+        return {"name": d[0], "display": d[1], "resource": d[2], "slim": bool(d[3])}
 
 
 def get_costume_existence(uuid: str, name: str) -> bool:
@@ -78,31 +80,64 @@ def get_costume_existence(uuid: str, name: str) -> bool:
             """SELECT c.name FROM costume c WHERE c.owner = %s AND c.name = %s""",
             (uuid, name),
         )
-        c = cur.fetchone()
-        return c is not None
+        d = cur.fetchone()
+        return d is not None
 
 
 class SkinType(TypedDict):
+    resource: str
     slim: bool
     hash: str
+    id: int
 
 
 def get_costume_skin(uuid: str, name: str) -> SkinType:
     with connect() as cur:
         cur.execute(
-            """SELECT s.hash, s.slim FROM costume c
-        INNER JOIN skin s ON c.skin = s.hash WHERE c.owner = %s AND c.name = %s""",
+            """SELECT s.id, s.hash, s.slim, s.resource FROM costume c
+            INNER JOIN skin s ON c.skin = s.id WHERE c.owner = %s AND c.name = %s""",
             (uuid, name),
         )
-        c = cur.fetchone()
-        if c is None:
-            raise NoRecordError("Could not find costume.")
-        return {"hash": c[0], "slim": bool(c[1])}
+        d = cur.fetchone()
+        if d is None:
+            raise NoRecordError()
+        return {"id": d[0], "hash": d[1], "slim": bool(d[2]), "resource": d[3]}
 
 
-def update_costume(uuid: str, name: str, new_name: str, skin: str, display: str):
+def update_costume(uuid: str, name: str, new_name: str, skin: int, display: str):
     with connect() as cur:
         cur.execute(
             "UPDATE costume SET name=%s, skin=%s, display=%s WHERE owner=%s AND name=%s",
             (new_name, skin, display, uuid, name),
         )
+
+
+def get_skin_id(hash: str, slim: bool) -> int:
+    with connect() as cur:
+        cur.execute("SELECT id FROM skin WHERE hash=%s AND slim=%s", (hash, slim))
+        d = cur.fetchone()
+        if d is None:
+            raise NoRecordError()
+        return d[0]
+
+
+def insert_skin(
+    hash: str,
+    slim: bool,
+    resource: str,
+    properties: str,
+    signature: str,
+) -> int:
+    with connect() as cur:
+        cur.execute(
+            """INSERT IGNORE INTO skin(hash, slim, resource, properties, signature)
+            VALUES (%s, %s, %s, FROM_BASE64(%s), FROM_BASE64(%s))""",
+            (hash, slim, resource, properties, signature),
+        )
+        if type(cur.lastrowid) is not int:
+            raise NoRecordError()
+        if cur.lastrowid != 0:
+            id = cur.lastrowid
+        else:
+            id = get_skin_id(hash, slim)
+        return id

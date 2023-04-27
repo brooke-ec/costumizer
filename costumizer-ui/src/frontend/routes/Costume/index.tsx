@@ -14,7 +14,7 @@ import SkinBrowser from "./SkinBrowser";
 import Input from "../../global/Input";
 
 export default function Costume() {
-	const [info, { refetch }] = createResource(() => useParams().name, fetchCostumeInfo);
+	const [info] = createResource(() => useParams().name, fetchCostumeInfo);
 	const [newSkin, setNewSkin] = createSignal<string | null>(null);
 	const [newSlim, setNewSlim] = createSignal<boolean>();
 	const [loading, setLoading] = createSignal(false);
@@ -35,7 +35,7 @@ export default function Costume() {
 	];
 
 	async function validateNameUnique(value: string) {
-		if (info()!.data!.name == value) return;
+		if (info()!.data!.name.toLowerCase() == value.toLowerCase()) return;
 		setLoading(true);
 		const response = await fetchCostumeExistence(value);
 		setLoading(false);
@@ -45,7 +45,8 @@ export default function Costume() {
 
 	async function submit() {
 		modal.open(LoadingModal);
-		const data: { [name: string]: ValueTypes } = { ...form.value(), skin: newSkin() };
+		const skin = newSkin()?.substring(22)! || null;
+		const data: { [name: string]: ValueTypes } = { ...form.value(), skin: skin };
 		const response = await updateCostume(info()!.data!.name, data);
 		modal.close();
 
