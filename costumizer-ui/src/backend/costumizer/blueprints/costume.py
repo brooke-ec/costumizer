@@ -1,7 +1,6 @@
 from costumizer.config import RENDERER_URL_BASE, TEXTURE_URL_BASE
 from costumizer.utils import get_parameter, get_body
 from costumizer.errors import NoRecordError
-from mysql.connector import DatabaseError
 from costumizer.auth import get_uuid
 from flask import Blueprint, abort
 import costumizer.database as db
@@ -14,10 +13,7 @@ costume = Blueprint("costume", __name__)
 @costume.get("/list")
 def list_costumes():
     uuid = get_uuid()
-    try:
-        costumes = db.get_costumes_list(uuid)
-    except DatabaseError as e:
-        abort(500, f"Database Error: {e.errno}")
+    costumes = db.get_costumes_list(uuid)
 
     def generate(c: db.CostumesListType):
         params = {"hash": c["hash"], "slim": str(c["slim"]).lower(), "scale": 5}
@@ -33,8 +29,6 @@ def costume_info():
     uuid = get_uuid()
     try:
         info = db.get_costume_info(uuid, name)
-    except DatabaseError as e:
-        abort(500, f"Database Error: {e.errno}")
     except NoRecordError:
         abort(404, f"Could not find costume: {name}")
     return {
@@ -51,10 +45,7 @@ def costume_info():
 def costume_exists():
     name = get_parameter("name")
     uuid = get_uuid()
-    try:
-        result = db.get_costume_existence(uuid, name)
-    except DatabaseError as e:
-        abort(500, f"Database Error: {e.errno}")
+    result = db.get_costume_existence(uuid, name)
     return {"exists": result}
 
 
@@ -73,10 +64,8 @@ def update_costume():
 
     try:
         skin_info = db.get_costume_skin(uuid, name)
-        db.update_costume(uuid, name, body["name"], skin_info["hash"], body["display"])
-    except DatabaseError as e:
-        abort(500, f"Database Error: {e.errno}")
     except NoRecordError:
         abort(404, f"Could not find costume: {name}")
 
+    db.update_costume(uuid, name, body["name"], skin_info["hash"], body["display"])
     return {"successful": True}

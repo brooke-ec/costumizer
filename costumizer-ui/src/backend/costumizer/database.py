@@ -1,7 +1,9 @@
 from costumizer.errors import NoRecordError
+from mysql.connector import DatabaseError
 from contextlib import contextmanager
 import costumizer.config as config
 from typing import TypedDict
+from flask import abort
 import mysql.connector
 
 POOL_NAME = "costumizer"
@@ -25,7 +27,11 @@ def setup_pool() -> None:
 def connect():
     with mysql.connector.connect(pool_name=POOL_NAME) as conn:
         with conn.cursor() as cur:
-            yield cur
+            try:
+                yield cur
+            except DatabaseError as e:
+                conn.rollback()
+                abort(500, f"Database Error: {e.errno}")
         conn.commit()
 
 
