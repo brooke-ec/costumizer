@@ -1,5 +1,5 @@
-import UnsuccessfulSaveModal from "./UnsuccessfulSaveModal";
 import { CostumeInfoType } from "../../../utils/api/costume";
+import UnsuccessfulSaveModal from "./UnsuccessfulSaveModal";
 import LoadingModal from "../../../global/LoadingModal";
 import Form, { FormValues } from "../../../utils/Form";
 import SkinPreview from "../../../global/SkinPreview";

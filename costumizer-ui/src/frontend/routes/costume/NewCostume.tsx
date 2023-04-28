@@ -20,7 +20,7 @@ export default function NewCostume() {
 
 	return (
 		<Show when={info()?.status != 404} fallback={<NotFound />}>
-			<h1 class={styles.title}>Create Costume</h1>
+			<h1 class={styles.title}>Create New Costume</h1>
 			<hr />
 			<CostumeEditor data={info()?.data} submit={submit} />
 		</Show>

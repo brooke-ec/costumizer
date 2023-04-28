@@ -54,6 +54,17 @@ def costume_info():
     }
 
 
+@costume.get("/data")
+def costume_data():
+    name = get_parameter("name")
+    uuid = get_uuid()
+
+    try:
+        return db.get_costume_data(uuid, name)
+    except NoRecordError:
+        abort(404, f"Could not find costume: {name}")
+
+
 @costume.get("/exists")
 def costume_exists():
     name = get_parameter("name")

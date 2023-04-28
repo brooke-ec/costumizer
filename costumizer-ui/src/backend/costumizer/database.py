@@ -155,3 +155,17 @@ def delete_costume(name: str, owner: str) -> int:
     with connect() as cur:
         cur.execute("DELETE FROM costume WHERE name=%s AND owner=%s", (name, owner))
         return cur.rowcount
+
+
+def get_costume_data(owner: str, name: str) -> dict[str, str]:
+    with connect() as cur:
+        cur.execute(
+            """SELECT c.display, TO_BASE64(s.properties), TO_BASE64(s.signature)
+            FROM costume c INNER JOIN skin s ON c.skin = s.id
+            WHERE c.owner = %s AND c.name = %s""",
+            (owner, name),
+        )
+        d = cur.fetchone()
+        if d is None:
+            raise NoRecordError()
+        return {"display": d[0], "properties": d[1], "signature": d[2]}

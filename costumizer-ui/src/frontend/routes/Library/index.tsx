@@ -14,7 +14,9 @@ export default function Library() {
 			<Show
 				when={!costumes.loading && costumes()?.data}
 				fallback={
-					<For each={new Array(8)}>{() => <div class={styles.loading_entry} />}</For>
+					<div class={styles.list}>
+						<For each={new Array(8)}>{() => <div class={styles.loading_entry} />}</For>
+					</div>
 				}
 			>
 				<Show
