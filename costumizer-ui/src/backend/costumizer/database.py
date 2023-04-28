@@ -112,6 +112,14 @@ def update_costume(owner: str, name: str, new_name: str, skin: int, display: str
         )
 
 
+def insert_costume(owner: str, name: str, skin: int, display: str):
+    with connect() as cur:
+        cur.execute(
+            "INSERT INTO costume VALUES(%s, %s, %s, %s)",
+            (name, owner, skin, display),
+        )
+
+
 def get_skin_id(hash: str, slim: bool) -> int:
     with connect() as cur:
         cur.execute("SELECT id FROM skin WHERE hash=%s AND slim=%s", (hash, slim))

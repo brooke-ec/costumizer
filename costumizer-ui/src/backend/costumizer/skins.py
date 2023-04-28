@@ -14,6 +14,21 @@ def generate_hash(image: Image.Image) -> str:
     return hashlib.sha256(image.tobytes()).hexdigest()
 
 
+def get_skin_from_url(url: str, slim: bool) -> int:
+    try:
+        response = requests.get(url)
+    except Exception:
+        parsed = urlparse.urlparse(url)
+        abort(500, f"Could not connect to {parsed.netloc}.")
+
+    hash = generate_hash(Image.open(BytesIO(response.content), formats=["png"]))
+
+    try:
+        return db.get_skin_id(hash, slim)
+    except NoRecordError:
+        return generate_from_url(url, slim, hash)
+
+
 def get_skin_from_hash(hash: str, slim: bool, resource: str) -> int:
     try:
         return db.get_skin_id(hash, slim)

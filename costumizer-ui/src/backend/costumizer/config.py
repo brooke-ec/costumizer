@@ -1,3 +1,4 @@
+import urllib.parse as urlparse
 import logging
 import dotenv
 import os
@@ -24,3 +25,13 @@ DB_DATABASE = get_required("DB_DATABASE")
 DB_PASSWORD = get_required("DB_PASSWORD")
 DB_USER = get_required("DB_USER")
 DB_HOST = get_required("DB_HOST")
+
+DEFAULT_NAME = os.environ.get("DEFAULT_NAME", "Untitled")
+DEFAULT_DISPLAY = os.environ.get("DEFAULT_DISPLAY", "Untitled")
+DEFAULT_SLIM = os.environ.get("DEFAULT_SLIM", "false").lower() == "true"
+DEFAULT_SKIN = os.environ.get(
+    "DEFAULT_SKIN",
+    urlparse.urljoin(
+        TEXTURE_URL_BASE, "31f477eb1a7beee631c2ca64d06f8f68fa93a3386d04452ab27f43acdf1b60cb"
+    ),
+)

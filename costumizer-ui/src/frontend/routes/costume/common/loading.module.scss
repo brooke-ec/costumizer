@@ -1,15 +1,9 @@
 @use "styles.module.scss";
-@import "../../index.scss";
+@import "../../../index.scss";
 
 @mixin box($width) {
 	@include shimmer($width);
 	border-radius: 3px;
-}
-
-.title {
-	@include box(800px);
-	height: 40px;
-	width: 400px;
 }
 
 .preview {

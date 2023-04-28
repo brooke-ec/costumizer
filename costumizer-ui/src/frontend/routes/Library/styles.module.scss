@@ -26,3 +26,23 @@
 	border-radius: 4px;
 	height: 193px;
 }
+
+.new {
+	@extend .entry;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+	display: flex;
+	height: 100%;
+
+	&:hover {
+		color: var(--link-default);
+	}
+}
+
+.plus {
+	margin-bottom: 10px;
+	font-size: 64px;
+	color: inherit;
+	fill: color;
+}

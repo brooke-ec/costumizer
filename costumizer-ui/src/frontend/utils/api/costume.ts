@@ -24,6 +24,10 @@ export async function fetchCostumeInfo(name: string) {
 	);
 }
 
+export async function fetchCostumeDefaults() {
+	return await request<CostumeInfoType>("/api/costume/defaults");
+}
+
 export async function fetchCostumeExistence(name: string) {
 	return await request<{ exists: boolean }>(
 		"/api/costume/exists?" + new URLSearchParams({ name: name }),
@@ -44,6 +48,14 @@ export async function updateCostume(name: string, data: object) {
 			method: "POST",
 		},
 	);
+}
+
+export async function createCostume(data: object) {
+	return await request<UpdateCostumeType>("/api/costume/create", {
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data),
+		method: "POST",
+	});
 }
 
 export async function deleteCostume(name: string) {

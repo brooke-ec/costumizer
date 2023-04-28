@@ -1,5 +1,5 @@
 import InvalidResolutionModal from "./InvalidResolutionModal";
-import { useModal } from "../../../global/Modal";
+import { useModal } from "../../../../global/Modal";
 import TooLargeModal from "./TooLargeModal";
 import styles from "./styles.module.scss";
 

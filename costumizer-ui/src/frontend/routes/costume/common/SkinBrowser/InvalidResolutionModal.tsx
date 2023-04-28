@@ -1,4 +1,4 @@
-import { useModal } from "../../../global/Modal";
+import { useModal } from "../../../../global/Modal";
 import styles from "../modal.module.scss";
 
 export default function InvalidResolutionModal() {

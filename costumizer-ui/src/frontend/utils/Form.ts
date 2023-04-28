@@ -3,12 +3,14 @@ import { Accessor, createMemo } from "solid-js";
 
 export type ValueTypes = string | number | boolean | null;
 
+export type FormValues = { [name: string]: ValueTypes };
+
 export type FormInput = {
 	valid: () => boolean;
 	value: () => ValueTypes;
 };
 
-type FormInputs = { [name: string]: FormInput };
+export type FormInputs = { [name: string]: FormInput };
 
 export default class Form {
 	inputs: FormInputs;
@@ -30,7 +32,7 @@ export default class Form {
 	}
 
 	value() {
-		const result: { [name: string]: ValueTypes } = {};
+		const result: FormValues = {};
 		Object.entries(this.inputs).forEach(([name, input]) => (result[name] = input.value()));
 		return result;
 	}

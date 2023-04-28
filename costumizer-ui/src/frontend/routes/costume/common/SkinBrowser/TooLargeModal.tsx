@@ -1,5 +1,5 @@
 import { MAX_FILE_SIZE } from ".";
-import { useModal } from "../../../global/Modal";
+import { useModal } from "../../../../global/Modal";
 import styles from "../modal.module.scss";
 
 export default function TooLargeModal() {

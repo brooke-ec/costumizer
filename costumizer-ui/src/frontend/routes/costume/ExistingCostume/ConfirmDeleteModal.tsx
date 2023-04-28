@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "@solidjs/router";
-import { deleteCostume } from "../../utils/api/costume";
-import LoadingModal from "../../global/LoadingModal";
-import { useModal } from "../../global/Modal";
-import styles from "./modal.module.scss";
+import { deleteCostume } from "../../../utils/api/costume";
+import LoadingModal from "../../../global/LoadingModal";
+import styles from "../common/modal.module.scss";
+import { useModal } from "../../../global/Modal";
 
 export default function ConfirmDeleteModal(props: { name: string }) {
 	const navigate = useNavigate();
