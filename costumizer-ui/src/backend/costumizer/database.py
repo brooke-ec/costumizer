@@ -41,13 +41,13 @@ class CostumesListType(TypedDict):
     slim: bool
 
 
-def get_costumes_list(uuid: str) -> list[CostumesListType]:
+def get_costumes_list(owner: str) -> list[CostumesListType]:
     with connect() as cur:
         cur.execute(
             """SELECT c.name, s.resource, s.slim FROM costume c
             INNER JOIN skin s ON c.skin = s.id WHERE c.owner = %s
             ORDER BY c.name""",
-            (uuid,),
+            (owner,),
         )
         return [
             {"name": c[0], "resource": c[1], "slim": bool(c[2])} for c in cur.fetchall()
@@ -61,12 +61,12 @@ class CostumeInfoType(TypedDict):
     resource: str
 
 
-def get_costume_info(uuid: str, name: str) -> CostumeInfoType:
+def get_costume_info(owner: str, name: str) -> CostumeInfoType:
     with connect() as cur:
         cur.execute(
             """SELECT c.name, c.display, s.resource, s.slim FROM costume c
         INNER JOIN skin s ON c.skin = s.id WHERE c.owner = %s AND c.name = %s""",
-            (uuid, name),
+            (owner, name),
         )
         d = cur.fetchone()
         if d is None:
@@ -74,11 +74,11 @@ def get_costume_info(uuid: str, name: str) -> CostumeInfoType:
         return {"name": d[0], "display": d[1], "resource": d[2], "slim": bool(d[3])}
 
 
-def get_costume_existence(uuid: str, name: str) -> bool:
+def get_costume_existence(owner: str, name: str) -> bool:
     with connect() as cur:
         cur.execute(
             """SELECT c.name FROM costume c WHERE c.owner = %s AND c.name = %s""",
-            (uuid, name),
+            (owner, name),
         )
         d = cur.fetchone()
         return d is not None
@@ -91,12 +91,12 @@ class SkinType(TypedDict):
     id: int
 
 
-def get_costume_skin(uuid: str, name: str) -> SkinType:
+def get_costume_skin(owner: str, name: str) -> SkinType:
     with connect() as cur:
         cur.execute(
             """SELECT s.id, s.hash, s.slim, s.resource FROM costume c
             INNER JOIN skin s ON c.skin = s.id WHERE c.owner = %s AND c.name = %s""",
-            (uuid, name),
+            (owner, name),
         )
         d = cur.fetchone()
         if d is None:
@@ -104,11 +104,11 @@ def get_costume_skin(uuid: str, name: str) -> SkinType:
         return {"id": d[0], "hash": d[1], "slim": bool(d[2]), "resource": d[3]}
 
 
-def update_costume(uuid: str, name: str, new_name: str, skin: int, display: str):
+def update_costume(owner: str, name: str, new_name: str, skin: int, display: str):
     with connect() as cur:
         cur.execute(
             "UPDATE costume SET name=%s, skin=%s, display=%s WHERE owner=%s AND name=%s",
-            (new_name, skin, display, uuid, name),
+            (new_name, skin, display, owner, name),
         )
 
 
@@ -141,3 +141,9 @@ def insert_skin(
         else:
             id = get_skin_id(hash, slim)
         return id
+
+
+def delete_costume(name: str, owner: str) -> int:
+    with connect() as cur:
+        cur.execute("DELETE FROM costume WHERE name=%s AND owner=%s", (name, owner))
+        return cur.rowcount

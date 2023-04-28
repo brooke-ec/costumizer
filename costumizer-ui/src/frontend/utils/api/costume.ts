@@ -45,3 +45,9 @@ export async function updateCostume(name: string, data: object) {
 		},
 	);
 }
+
+export async function deleteCostume(name: string) {
+	return await request("/api/costume/delete?" + new URLSearchParams({ name: name }), {
+		method: "POST",
+	});
+}

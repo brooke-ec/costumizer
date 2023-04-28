@@ -91,3 +91,15 @@ def update_costume():
 
     db.update_costume(uuid, name, body["name"], skin, body["display"])
     return {"successful": True}
+
+
+@costume.post("/delete")
+def delete_costume():
+    name = get_parameter("name")
+    uuid = get_uuid()
+
+    deleted = db.delete_costume(name, uuid)
+    if not deleted:
+        abort(404, f"Could not find costume: {name}")
+
+    return {"successful": True}

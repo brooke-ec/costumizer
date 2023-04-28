@@ -1,7 +1,9 @@
 import { fetchCostumeExistence, fetchCostumeInfo, updateCostume } from "../../utils/api/costume";
 import { Match, Show, Switch, createResource, createSignal } from "solid-js";
+import UnsuccessfulSaveModal from "./UnsuccessfulSaveModal";
 import { useNavigate, useParams } from "@solidjs/router";
 import LoadingButton from "../../global/LoadingButton";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import LoadingModal from "../../global/LoadingModal";
 import Form, { ValueTypes } from "../../utils/Form";
 import SkinPreview from "../../global/SkinPreview";
@@ -9,7 +11,6 @@ import RadioButton from "../../global/RadioButton";
 import { useModal } from "../../global/Modal";
 import styles from "./styles.module.scss";
 import NotFound from "../system/NotFound";
-import UnsuccessfulSaveModal from "./UnsuccessfulSaveModal";
 import SkinBrowser from "./SkinBrowser";
 import Input from "../../global/Input";
 
@@ -53,6 +54,10 @@ export default function Costume() {
 		if (response.status != 200!)
 			modal.open(() => UnsuccessfulSaveModal({ message: response.data?.error }));
 		else if (info()!.data!.name != data.name) navigate(`../${data.name}`);
+	}
+
+	async function deleteCostume() {
+		modal.open(() => ConfirmDeleteModal({ name: info()!.data!.name }));
 	}
 
 	return (
@@ -113,7 +118,9 @@ export default function Costume() {
 								<SkinBrowser onChange={setNewSkin} />
 							</div>
 							<div class={styles.controls}>
-								<button class="danger">Delete</button>
+								<button class="danger" onClick={deleteCostume}>
+									Delete
+								</button>
 								<LoadingButton
 									class="green"
 									onClick={submit}
