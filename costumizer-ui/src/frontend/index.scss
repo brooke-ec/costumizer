@@ -140,10 +140,10 @@ label {
 
 @mixin shimmer($width: 100px) {
 	background: linear-gradient(100deg, #353544 20%, #515166 50%, #353544 80%);
-	animation: shimmer linear 1s infinite;
+	animation: shimmer-#{$width} linear 1s infinite;
 	background-size: $width 100%;
 
-	@keyframes shimmer {
+	@keyframes shimmer-#{$width} {
 		0% {
 			background-position: 0 0;
 		}

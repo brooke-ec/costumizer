@@ -1,0 +1,35 @@
+@use "styles.module.scss";
+@import "../../index.scss";
+
+@mixin box($width) {
+	@include shimmer($width);
+	border-radius: 3px;
+}
+
+.title {
+	@include box(800px);
+	height: 40px;
+	width: 400px;
+}
+
+.preview {
+	@include box(1000px);
+}
+
+.input {
+	@include box(800px);
+	margin-top: 30px;
+	height: 30px;
+}
+
+.radio {
+	@extend .input;
+	width: 200px;
+	height: 40px;
+}
+
+.browse {
+	@extend .input;
+	width: 100px;
+	height: 40px;
+}

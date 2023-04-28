@@ -8,6 +8,7 @@ import LoadingModal from "../../global/LoadingModal";
 import Form, { ValueTypes } from "../../utils/Form";
 import SkinPreview from "../../global/SkinPreview";
 import RadioButton from "../../global/RadioButton";
+import loadingStyle from "./loading.module.scss";
 import { useModal } from "../../global/Modal";
 import styles from "./styles.module.scss";
 import NotFound from "../system/NotFound";
@@ -61,7 +62,24 @@ export default function Costume() {
 	}
 
 	return (
-		<Show when={!info.loading && info()}>
+		<Show
+			when={!info.loading && info()}
+			fallback={
+				<>
+					<div class={loadingStyle.title} />
+					<hr />
+					<div class={styles.grid}>
+						<div class={loadingStyle.preview}></div>
+						<div class={styles.form}>
+							<div class={loadingStyle.input} />
+							<div class={loadingStyle.input} />
+							<div class={loadingStyle.radio} />
+							<div class={loadingStyle.browse} />
+						</div>
+					</div>
+				</>
+			}
+		>
 			<Switch>
 				<Match when={info()!.status == 404}>
 					<NotFound />
