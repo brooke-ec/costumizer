@@ -40,9 +40,17 @@
 	}
 }
 
-.plus {
+.icon {
 	margin-bottom: 10px;
 	font-size: 64px;
 	color: inherit;
 	fill: color;
+}
+
+.empty {
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 20px;
+	display: flex;
 }
