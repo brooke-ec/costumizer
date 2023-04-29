@@ -35,3 +35,5 @@ DEFAULT_SKIN = os.environ.get(
         TEXTURE_URL_BASE, "31f477eb1a7beee631c2ca64d06f8f68fa93a3386d04452ab27f43acdf1b60cb"
     ),
 )
+
+STATIC_FOLDER = os.environ.get("STATIC_FOLDER", "../static")

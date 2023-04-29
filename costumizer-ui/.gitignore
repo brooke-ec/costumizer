@@ -1,5 +1,6 @@
 __pycache__/
 costumizer.secret
 node_modules
+build
 dist
 .env
