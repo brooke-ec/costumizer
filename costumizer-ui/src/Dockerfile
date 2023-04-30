@@ -10,4 +10,4 @@ COPY static /usr/src/app/static
 WORKDIR /usr/src/app
 
 EXPOSE 8080
-CMD ["gunicorn", "--workers", "$GUNICORN_WORKERS", "--bind", "0.0.0.0:8080", "wsgi:app"]
+CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8080", "wsgi:app"]
