@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.papermc.paperweight.userdev' version "1.5.0"
 }
 
 group = 'net.nimajnebec'
@@ -7,6 +8,10 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
     maven {
         name = "papermc-repo"
         url = "https://repo.papermc.io/repository/maven-public/"
@@ -19,6 +24,7 @@ repositories {
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT"
+    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.19.4-R0.1-SNAPSHOT")
 }
 
 def targetJavaVersion = 17
@@ -35,6 +41,17 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release = targetJavaVersion
     }
+}
+
+tasks.assemble {
+    // Configure reobfJar to run when invoking the build task
+    dependsOn(reobfJar)
+}
+
+tasks.compileJava {
+    // Set the release flag. This configures what version bytecode the compiler will emit, as well as what JDK APIs are usable.
+    // See https://openjdk.java.net/jeps/247 for more information.
+    options.release.set(targetJavaVersion)
 }
 
 processResources {
