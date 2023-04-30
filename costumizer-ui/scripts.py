@@ -81,7 +81,7 @@ def build():
             "--pull",
             "--rm",
             "-t",
-            "costumizerui:latest",
+            "costumizer-ui:latest",
             ".",
         ],
         cwd="./build",
