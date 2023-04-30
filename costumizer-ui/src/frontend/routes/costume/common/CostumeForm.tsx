@@ -6,6 +6,8 @@ import { Show, createSignal } from "solid-js";
 import styles from "./styles.module.scss";
 import Input from "../../../global/Input";
 import SkinBrowser from "./SkinBrowser";
+import { useModal } from "../../../global/Modal";
+import { useIdentity } from "../../../global/Identity";
 
 export default function CostumeForm(props: {
 	onModelChange: (value: ValueTypes) => void;
@@ -16,6 +18,8 @@ export default function CostumeForm(props: {
 	form: Form;
 }) {
 	const [validating, setValidating] = createSignal(false);
+	const identity = useIdentity();
+	const modal = useModal();
 
 	const validators = [
 		{
@@ -32,7 +36,7 @@ export default function CostumeForm(props: {
 	async function validateNameUnique(value: string) {
 		if (props.data.name.toLowerCase() == value.toLowerCase()) return;
 		setValidating(true);
-		const response = await fetchCostumeExistence(value);
+		const response = await fetchCostumeExistence([value, identity, modal]);
 		setValidating(false);
 		if (!response.data!.exists) return;
 		return "There is already a costume registered with this name.";

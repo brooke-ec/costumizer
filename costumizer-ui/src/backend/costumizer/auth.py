@@ -7,7 +7,9 @@ import os
 def get_secret() -> str:
     if os.path.exists("costumizer.secret"):
         with open("costumizer.secret", "r") as f:
-            return f.read()
+            data = f.read()
+            if data != "":
+                return data
 
     token = base64.b64encode(os.urandom(32)).decode()
     with open("costumizer.secret", "w") as f:

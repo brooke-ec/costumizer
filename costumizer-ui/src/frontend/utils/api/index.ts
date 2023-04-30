@@ -1,19 +1,20 @@
 import UnexpectedError from "../../routes/system/UnexpectedError";
-import { useIdentity } from "../../global/Identity";
-import { useModal } from "../../global/Modal";
+import { IdentityType, useIdentity } from "../../global/Identity";
+import { ModalType, useModal } from "../../global/Modal";
 
 export type ResponseData<T> = {
 	status: number;
 	data?: T;
 };
 
+// The way contexts are passed around here is terrible.
+// Needs refactoring.
 export async function request<T>(
 	input: RequestInfo | URL,
+	identity: IdentityType,
+	modal: ModalType,
 	init: RequestInit = {},
 ): Promise<ResponseData<T>> {
-	const identity = useIdentity();
-	const modal = useModal();
-
 	let response;
 	try {
 		response = await fetch(input, {

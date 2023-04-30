@@ -4,6 +4,8 @@ import { createContext, useContext, JSX, createSignal, Setter, Accessor } from "
 
 export type ModalFactory = () => JSX.Element;
 
+export type ModalType = ReturnType<typeof makeModalContext>;
+
 function makeModalContext(stack?: {
 	stack: Accessor<ModalFactory[]>;
 	setStack: Setter<ModalFactory[]>;

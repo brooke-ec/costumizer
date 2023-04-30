@@ -3,14 +3,20 @@ import { Show, createEffect, createResource } from "solid-js";
 import { A, Outlet, useLocation } from "@solidjs/router";
 import { fetchUserInfo } from "../../utils/api/user";
 import FaceRenderer from "../FaceRenderer";
-import { useIdentity } from "../Identity";
+import { IdentityType, useIdentity } from "../Identity";
 import styles from "./styles.module.scss";
+import { ModalType, useModal } from "../Modal";
 import Fa from "solid-fa";
 
 export default function Header() {
-	const [info] = createResource(fetchUserInfo);
 	const identity = useIdentity();
 	const location = useLocation();
+	const modal = useModal();
+
+	const [info] = createResource(
+		() => [identity, modal] as [IdentityType, ModalType],
+		fetchUserInfo,
+	);
 
 	createEffect(() => {
 		if (!identity.token()) identity.invalidate();

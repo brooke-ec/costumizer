@@ -5,9 +5,16 @@ import styles from "./styles.module.scss";
 import Card from "../../global/Card";
 import { A } from "@solidjs/router";
 import Fa from "solid-fa";
+import { ModalType, useModal } from "../../global/Modal";
+import { IdentityType, useIdentity } from "../../global/Identity";
 
 export default function Library() {
-	const [costumes] = createResource(fetchCostumes);
+	const modal = useModal();
+	const identity = useIdentity();
+	const [costumes] = createResource(
+		() => [identity, modal] as [IdentityType, ModalType],
+		fetchCostumes,
+	);
 
 	return (
 		<>

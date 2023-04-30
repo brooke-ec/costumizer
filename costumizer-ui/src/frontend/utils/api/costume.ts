@@ -1,3 +1,5 @@
+import { IdentityType } from "../../global/Identity";
+import { ModalType } from "../../global/Modal";
 import { request } from ".";
 
 export type CostumesListType = {
@@ -5,8 +7,8 @@ export type CostumesListType = {
 	preview: string;
 }[];
 
-export async function fetchCostumes() {
-	return await request<CostumesListType>("/api/costume/list");
+export async function fetchCostumes([identity, modal]: [IdentityType, ModalType]) {
+	return await request<CostumesListType>("/api/costume/list", identity, modal);
 }
 
 export type CostumeInfoType = {
@@ -18,19 +20,27 @@ export type CostumeInfoType = {
 	};
 };
 
-export async function fetchCostumeInfo(name: string) {
+export async function fetchCostumeInfo([name, identity, modal]: [string, IdentityType, ModalType]) {
 	return await request<CostumeInfoType>(
 		"/api/costume/info?" + new URLSearchParams({ name: name }),
+		identity,
+		modal,
 	);
 }
 
-export async function fetchCostumeDefaults() {
-	return await request<CostumeInfoType>("/api/costume/defaults");
+export async function fetchCostumeDefaults([identity, modal]: [IdentityType, ModalType]) {
+	return await request<CostumeInfoType>("/api/costume/defaults", identity, modal);
 }
 
-export async function fetchCostumeExistence(name: string) {
+export async function fetchCostumeExistence([name, identity, modal]: [
+	string,
+	IdentityType,
+	ModalType,
+]) {
 	return await request<{ exists: boolean }>(
 		"/api/costume/exists?" + new URLSearchParams({ name: name }),
+		identity,
+		modal,
 	);
 }
 
@@ -39,9 +49,16 @@ export type UpdateCostumeType = {
 	error?: string;
 };
 
-export async function updateCostume(name: string, data: object) {
+export async function updateCostume([name, data, identity, modal]: [
+	string,
+	object,
+	IdentityType,
+	ModalType,
+]) {
 	return await request<UpdateCostumeType>(
 		"/api/costume/update?" + new URLSearchParams({ name: name }),
+		identity,
+		modal,
 		{
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(data),
@@ -50,16 +67,21 @@ export async function updateCostume(name: string, data: object) {
 	);
 }
 
-export async function createCostume(data: object) {
-	return await request<UpdateCostumeType>("/api/costume/create", {
+export async function createCostume([data, identity, modal]: [object, IdentityType, ModalType]) {
+	return await request<UpdateCostumeType>("/api/costume/create", identity, modal, {
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(data),
 		method: "POST",
 	});
 }
 
-export async function deleteCostume(name: string) {
-	return await request("/api/costume/delete?" + new URLSearchParams({ name: name }), {
-		method: "POST",
-	});
+export async function deleteCostume([name, identity, modal]: [string, IdentityType, ModalType]) {
+	return await request(
+		"/api/costume/delete?" + new URLSearchParams({ name: name }),
+		identity,
+		modal,
+		{
+			method: "POST",
+		},
+	);
 }

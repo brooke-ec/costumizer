@@ -1,21 +1,26 @@
 import { fetchCostumeInfo, updateCostume } from "../../../utils/api/costume";
+import { IdentityType, useIdentity } from "../../../global/Identity";
+import { ModalType, useModal } from "../../../global/Modal";
 import { useNavigate, useParams } from "@solidjs/router";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import CostumeEditor from "../common/CostumeEditor";
 import styles from "../common/styles.module.scss";
-import { useModal } from "../../../global/Modal";
 import { FormValues } from "../../../utils/Form";
 import { Show, createResource } from "solid-js";
 import NotFound from "../../system/NotFound";
 
 export default function ExistingCostume() {
-	const params = useParams();
-	const [info] = createResource(() => params.name, fetchCostumeInfo);
-	const navigate = useNavigate();
 	const modal = useModal();
+	const params = useParams();
+	const navigate = useNavigate();
+	const identity = useIdentity();
+	const [info] = createResource(
+		() => [params.name, identity, modal] as [string, IdentityType, ModalType],
+		fetchCostumeInfo,
+	);
 
 	async function submit(data: FormValues) {
-		const response = await updateCostume(params.name, data);
+		const response = await updateCostume([params.name, data, identity, modal]);
 		if (response.status != 200!) return response.data?.error;
 		if (params.name != data.name) navigate(`../${data.name}`);
 	}

@@ -3,6 +3,8 @@ import { useNavigate, Navigator } from "@solidjs/router";
 
 const STORAGE_KEY = "token";
 
+export type IdentityType = ReturnType<typeof makeIdentityContext>;
+
 function makeIdentityContext(navigate?: Navigator) {
 	const previous = window.sessionStorage.getItem(STORAGE_KEY);
 	const [token, setToken] = createSignal<null | string>(previous);

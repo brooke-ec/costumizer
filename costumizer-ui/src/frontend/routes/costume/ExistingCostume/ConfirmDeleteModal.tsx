@@ -3,15 +3,17 @@ import { deleteCostume } from "../../../utils/api/costume";
 import LoadingModal from "../../../global/LoadingModal";
 import styles from "../common/modal.module.scss";
 import { useModal } from "../../../global/Modal";
+import { useIdentity } from "../../../global/Identity";
 
 export default function ConfirmDeleteModal(props: { name: string }) {
 	const navigate = useNavigate();
+	const identity = useIdentity();
 	const modal = useModal();
 
 	async function confirmDelete() {
 		modal.close();
 		modal.open(LoadingModal);
-		await deleteCostume(props.name);
+		await deleteCostume([props.name, identity, modal]);
 		modal.close();
 		navigate("/");
 	}
