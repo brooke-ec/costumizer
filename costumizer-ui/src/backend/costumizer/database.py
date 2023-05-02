@@ -139,7 +139,7 @@ def insert_skin(
     with connect() as cur:
         cur.execute(
             """INSERT IGNORE INTO skin(hash, slim, resource, properties, signature)
-            VALUES (%s, %s, %s, FROM_BASE64(%s), FROM_BASE64(%s))""",
+            VALUES (%s, %s, %s, %s, %s)""",
             (hash, slim, resource, properties, signature),
         )
         if type(cur.lastrowid) is not int:
@@ -160,7 +160,7 @@ def delete_costume(name: str, owner: str) -> int:
 def get_costume_data(owner: str, name: str) -> dict[str, str]:
     with connect() as cur:
         cur.execute(
-            """SELECT c.display, TO_BASE64(s.properties), TO_BASE64(s.signature)
+            """SELECT c.display, s.properties, s.signature
             FROM costume c INNER JOIN skin s ON c.skin = s.id
             WHERE c.owner = %s AND c.name = %s""",
             (owner, name),
