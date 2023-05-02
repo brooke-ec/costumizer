@@ -2,8 +2,10 @@ package net.nimajnebec.costumizer;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
+import javax.annotation.Nullable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class CostumizerConfiguration {
 
@@ -22,7 +24,7 @@ public class CostumizerConfiguration {
 
     private boolean isString(String path) {
         if (file.isString(path)) return true;
-        plugin.logger.error("Configuration option '{}' is not a string", path);
+        plugin.getSLF4JLogger().error("Configuration option '{}' is not a string", path);
         return false;
     }
 
@@ -30,12 +32,16 @@ public class CostumizerConfiguration {
         try {
             return new URL(file.getString("ui-url"));
         } catch (MalformedURLException e) {
-            plugin.logger.error("Configuration option 'ui-url' is malformed");
             throw new RuntimeException(e);
         }
     }
 
-    public String getSecret() {
-        return file.getString("secret");
+    public byte[] getSecret() {
+        return file.getString("secret").getBytes(StandardCharsets.UTF_8);
+    }
+
+    public @Nullable String getPrefix() {
+        if (file.isString("prefix")) return file.getString("prefix");
+        return null;
     }
 }

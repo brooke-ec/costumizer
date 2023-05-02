@@ -3,3 +3,7 @@ ui-url: https://example.com/costumzer
 
 # The content of the costumizer.secret file from the UI
 secret: your-256-bit-secret
+
+# Chat prefix of all costumizer messages in MiniMessage format
+# See: https://docs.advntr.dev/minimessage/format.html
+#prefix: [<green>Costumizer</green>]
