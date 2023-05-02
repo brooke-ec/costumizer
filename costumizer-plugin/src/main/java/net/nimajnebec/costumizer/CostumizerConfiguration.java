@@ -41,7 +41,7 @@ public class CostumizerConfiguration {
     }
 
     public @Nullable String getPrefix() {
-        if (file.isString("prefix")) return file.getString("prefix");
+        if (file.isString("chat-prefix")) return file.getString("chat-prefix");
         return null;
     }
 }

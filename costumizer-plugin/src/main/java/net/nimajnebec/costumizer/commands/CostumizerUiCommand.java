@@ -15,16 +15,21 @@ import org.bukkit.entity.Player;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public record UiCommand(Costumizer plugin) implements Command<CommandSourceStack> {
-    static final Component ONLY_PLAYERS_MESSAGE =
-            Component.text("This command can only be used by players.", NamedTextColor.RED);
+public class CostumizerUiCommand implements Command<CommandSourceStack> {
     static final String LOGIN_URL = "/login?token=";
+
+
+    public Costumizer plugin;
+
+    public CostumizerUiCommand() {
+        plugin = Costumizer.getInstance();
+    }
 
     @Override
     public int run(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         CommandSender sender = ctx.getSource().getBukkitSender();
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(plugin.getChatPrefix().append(ONLY_PLAYERS_MESSAGE));
+            sender.sendMessage(plugin.getChatPrefix().append(plugin.ONLY_PLAYERS_MESSAGE));
             return 0;
         }
 

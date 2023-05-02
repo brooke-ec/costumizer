@@ -6,4 +6,6 @@ author: NimajnebEC
 api-version: 1.19
 commands:
   costumizer:
-    description: Base command for costumizer
+    description: Base command for costumizer.
+  costume:
+    description: Command for managing your current costume.

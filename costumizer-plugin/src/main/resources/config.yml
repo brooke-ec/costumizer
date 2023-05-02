@@ -6,4 +6,4 @@ secret: your-256-bit-secret
 
 # Chat prefix of all costumizer messages in MiniMessage format
 # See: https://docs.advntr.dev/minimessage/format.html
-#prefix: [<green>Costumizer</green>]
+#chat-prefix: "[<green>Costumizer</green>] "
