@@ -4,3 +4,7 @@ main: net.nimajnebec.costumizer.Costumizer
 description: A plugin that allows players to equip costumes to change their appearance.
 author: NimajnebEC
 api-version: 1.19
+commands:
+  costumizer:
+    description: Base command for costumizer
+    usage: /<command>
