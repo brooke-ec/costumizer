@@ -1,0 +1,5 @@
+# The base url of your hosted instance of the costumizer UI
+ui-url: https://example.com/costumzer
+
+# The content of the costumizer.secret file from the UI
+secret: your-256-bit-secret

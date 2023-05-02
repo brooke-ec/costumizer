@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.brigadier.CommandRegisteredEvent;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.command.Command;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,7 +26,9 @@ public class BrigadierRegister implements Listener {
     }
 
     public void register(String name, BrigadierCommand builder) {
-        this.commandMap.put(this.plugin.getCommand(name), builder);
+        PluginCommand command = this.plugin.getCommand(name);
+        command.register(this.plugin.getServer().getCommandMap());
+        this.commandMap.put(command, builder);
     }
 
     @EventHandler

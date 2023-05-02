@@ -7,4 +7,3 @@ api-version: 1.19
 commands:
   costumizer:
     description: Base command for costumizer
-    usage: /<command>
