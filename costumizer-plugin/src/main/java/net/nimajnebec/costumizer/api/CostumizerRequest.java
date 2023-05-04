@@ -15,7 +15,7 @@ public class CostumizerRequest {
     @Nullable private String token;
     private final URL url;
     private String text;
-
+    private int status;
 
     public CostumizerRequest(URL url) {
         this.url = url;
@@ -25,19 +25,12 @@ public class CostumizerRequest {
         this.token = Costumizer.getInstance().getAuthenticationService().generateToken(uuid);
     }
 
-    public void get() {
-        this.execute("GET");
-    }
-
-    public void execute(String method) {
-        try {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod(method);
-            if (token != null) conn.setRequestProperty("Authorization", "Bearer " + token);
-            text = IOUtils.toString(conn.getInputStream(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void execute(String method) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod(method);
+        if (token != null) conn.setRequestProperty("Authorization", "Bearer " + token);
+        text = IOUtils.toString(conn.getInputStream(), StandardCharsets.UTF_8);
+        status = conn.getResponseCode();
     }
 
     public <T> T deserialize(Class<T> typeof) {
@@ -50,5 +43,9 @@ public class CostumizerRequest {
 
     public URL getUrl() {
         return this.url;
+    }
+
+    public int getStatus() {
+        return this.status;
     }
 }

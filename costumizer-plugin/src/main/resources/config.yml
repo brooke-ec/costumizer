@@ -1,9 +1,13 @@
 # The base url of your hosted instance of the costumizer UI
-ui-url: https://example.com/costumzer
+url: https://example.com/costumzer
 
 # The content of the costumizer.secret file from the UI
 secret: your-256-bit-secret
 
 # Chat prefix of all costumizer messages in MiniMessage format
 # See: https://docs.advntr.dev/minimessage/format.html
-#chat-prefix: "[<green>Costumizer</green>] "
+chat-prefix: "[<green>Costumizer</green>]"
+
+# Prefix added the display name of players in costume, in MiniMessage format
+# See: https://docs.advntr.dev/minimessage/format.html
+name-prefix: "~"

@@ -1,7 +1,7 @@
 package net.nimajnebec.costumizer.authentication;
 
 import com.google.gson.Gson;
-import net.nimajnebec.costumizer.CostumizerConfiguration;
+import net.nimajnebec.costumizer.configuration.CostumizerConfiguration;
 import net.nimajnebec.costumizer.authentication.json.TokenHeader;
 import net.nimajnebec.costumizer.authentication.json.TokenPayload;
 
