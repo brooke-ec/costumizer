@@ -7,50 +7,78 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import io.papermc.paper.adventure.PaperAdventure;
 import net.kyori.adventure.text.Component;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import net.nimajnebec.costumizer.api.json.CostumeData;
-import org.bukkit.Bukkit;
+import net.nimajnebec.costumizer.configuration.CostumizerConfiguration;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class CostumeService {
+    private static final String PROPERTY_KEY = "textures";
 
     private final Costumizer plugin;
+    private final CostumizerConfiguration configuration;
+    private final Map<UUID, GameProfile> costumes = new HashMap<>();
+    private final PlayerTeam team;
 
     public CostumeService(Costumizer plugin) {
         this.plugin = plugin;
+        this.configuration = plugin.getConfiguration();
+        this.team = new PlayerTeam(new Scoreboard(), "");
     }
 
-    public void equip(ServerPlayer player, CostumeData data) {
-        String name = player.getName().getString();
-        Property property = new Property("textures", data.properties, data.signature);
-        GameProfile profile = new GameProfile(player.getUUID(), " " + data.display);
-        PropertyMap propertyMap = profile.getProperties();
-        propertyMap.removeAll("textures");
-        propertyMap.put("textures", property);
-        Player bukkitPlayer = player.getBukkitEntity();
-        bukkitPlayer.setPlayerProfile(new CraftPlayerProfile(profile));
-        bukkitPlayer.displayName(Component.text(data.display));
-        profile = new GameProfile(player.getUUID(), name);
-        player.gameProfile = profile;
+    public void initialise() {
+        this.team.setPlayerPrefix(PaperAdventure.asVanilla(plugin.getConfiguration().getNamePrefix()));
+    }
 
-        Scoreboard scoreboard = player.getScoreboard();
-        PlayerTeam team = new PlayerTeam(new Scoreboard(), "");
-        team.setPlayerPrefix(PaperAdventure.asVanilla(plugin.getConfiguration().getNamePrefix()));
-        team.getPlayers().add(" " + data.display);
-        ClientboundSetPlayerTeamPacket packet = ClientboundSetPlayerTeamPacket.createAddOrModifyPacket(team, true);
-        for (ServerPlayer entityplayer : (List<ServerPlayer>) player.server.getPlayerList().players) {
-            entityplayer.connection.send(packet);
-        }
+    public ClientboundSetPlayerTeamPacket getTeamPacket() {
+        return ClientboundSetPlayerTeamPacket.createAddOrModifyPacket(team, true);
+    }
+
+    public void equip(Player player, CostumeData data) {
+        UUID uuid = player.getUniqueId();
+
+        // Generate Profile
+        GameProfile profile = this.generateProfile(uuid, data);
+        this.costumes.put(uuid, profile);
+
+        // Reload profile on clients
+        player.setPlayerProfile(player.getPlayerProfile());
+
+        // Setup cosmetics
+        this.joinTeam(profile.getName());
+        player.displayName(configuration.getNamePrefix().append(Component.text(profile.getName())));
+    }
+
+    public boolean inCostume(UUID uuid) {
+        return costumes.containsKey(uuid);
+    }
+
+    public GameProfile getCostume(UUID uuid) {
+        return costumes.get(uuid);
+    }
+
+    private void joinTeam(String name) {
+        ClientboundSetPlayerTeamPacket.Action action = ClientboundSetPlayerTeamPacket.Action.ADD;
+        Packet<?> packet = ClientboundSetPlayerTeamPacket.createPlayerPacket(team, name, action);
+        team.getPlayers().add(name);
+        plugin.broadcast(packet);
+    }
+
+    private GameProfile generateProfile(UUID uuid, CostumeData data) {
+        GameProfile profile = new GameProfile(uuid, " " + data.display);
+        Property property = new Property(PROPERTY_KEY, data.properties, data.signature);
+        PropertyMap map = profile.getProperties();
+        map.removeAll(PROPERTY_KEY);
+        map.put(PROPERTY_KEY, property);
+        return profile;
     }
 }

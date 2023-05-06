@@ -27,7 +27,6 @@ import java.util.concurrent.CompletableFuture;
 public class CostumeEquipCommand implements Command<CommandSourceStack>, SuggestionProvider<CommandSourceStack> {
 
     private final Map<UUID, SuggestionCache> userMap = new HashMap<>();
-
     private final Costumizer plugin;
 
     public CostumeEquipCommand() {
@@ -48,7 +47,7 @@ public class CostumeEquipCommand implements Command<CommandSourceStack>, Suggest
             try {
                 CostumeData data = plugin.getApiService().getCostumeData(player.getUniqueId(), name);
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    plugin.getCostumeService().equip(ctx.getSource().getPlayer(), data);
+                    plugin.getCostumeService().equip(player, data);
                 });
             } catch (FileNotFoundException e) {
                 player.sendMessage(plugin.getChatPrefix()

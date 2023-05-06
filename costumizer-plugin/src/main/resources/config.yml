@@ -10,4 +10,4 @@ chat-prefix: "[<green>Costumizer</green>]"
 
 # Prefix added the display name of players in costume, in MiniMessage format
 # See: https://docs.advntr.dev/minimessage/format.html
-name-prefix: "~"
+name-prefix: "[<green>C</green>]"
