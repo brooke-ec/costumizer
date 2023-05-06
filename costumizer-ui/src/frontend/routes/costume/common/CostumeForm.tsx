@@ -64,7 +64,7 @@ export default function CostumeForm(props: {
 					form={props.form}
 					minlength="3"
 					name="display"
-					maxlength="16"
+					maxlength="15"
 					class={styles.input}
 					validators={validators}
 					value={props.data.display}

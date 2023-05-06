@@ -20,7 +20,7 @@ class SaveBodyType(TypedDict):
 
 
 RE_NAME = re.compile(r"^[\w\d_]{1,32}$")
-RE_DISPLAY = re.compile(r"^[\w\d_]{3,16}$")
+RE_DISPLAY = re.compile(r"^[\w\d_]{3,15}$")
 
 
 @costume.get("/list")
