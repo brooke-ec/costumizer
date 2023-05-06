@@ -79,6 +79,7 @@ public final class Costumizer extends JavaPlugin {
     @Override
     public void onDisable() {
         for (Player player : this.getServer().getOnlinePlayers()) {
+            if (costumeService.inCostume(player)) this.costumeService.clear(player);
             try {
                 PacketInterceptor.removeInterceptor(player);
             } catch (NoSuchElementException e) {

@@ -58,12 +58,30 @@ public class CostumeService {
         player.displayName(configuration.getNamePrefix().append(Component.text(profile.getName())));
     }
 
+    public void clear(Player player) {
+        // Remove Costume
+        this.cleanupPlayer(player.getUniqueId());
+
+        // Reload profile on clients
+        player.setPlayerProfile(player.getPlayerProfile());
+    }
+
+    public boolean inCostume(Player player) {
+        return this.inCostume(player.getUniqueId());
+    }
+
     public boolean inCostume(UUID uuid) {
         return costumes.containsKey(uuid);
     }
 
     public GameProfile getCostume(UUID uuid) {
         return costumes.get(uuid);
+    }
+
+    public void cleanupPlayer(UUID uuid) {
+        String name = this.costumes.get(uuid).getName();
+        this.team.getPlayers().remove(name);
+        this.costumes.remove(uuid);
     }
 
     private void joinTeam(String name) {
