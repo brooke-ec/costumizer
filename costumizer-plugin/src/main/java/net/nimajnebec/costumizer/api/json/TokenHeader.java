@@ -1,4 +1,4 @@
-package net.nimajnebec.costumizer.authentication.json;
+package net.nimajnebec.costumizer.api.json;
 
 public class TokenHeader {
 

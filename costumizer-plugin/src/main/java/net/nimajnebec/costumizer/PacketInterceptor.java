@@ -1,17 +1,19 @@
-package net.nimajnebec.costumizer.protocol;
+package net.nimajnebec.costumizer;
 
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.ChannelPromise;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
-import net.nimajnebec.costumizer.CostumeService;
-import net.nimajnebec.costumizer.Costumizer;
+import net.minecraft.server.level.ServerPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 public class PacketInterceptor extends ChannelDuplexHandler {
+    public static final String HANDLER_NAME = "costumizer_packet_interceptor";
     private static final Field entriesField;
     private final CostumeService costumeService;
     private final Costumizer plugin;
@@ -29,6 +31,18 @@ public class PacketInterceptor extends ChannelDuplexHandler {
                 return field;
         }
         throw new NoSuchElementException("Could not find entries field.");
+    }
+
+    public static void removeInterceptor(Player player) throws NoSuchElementException {
+        ServerPlayer handle = ((CraftPlayer) player).getHandle();
+        handle.connection.connection.channel.pipeline().remove(HANDLER_NAME);
+    }
+
+    public static void injectInterceptor(Player player) {
+        PacketInterceptor handler = new PacketInterceptor(player);
+        ServerPlayer handle = ((CraftPlayer) player).getHandle();
+        ChannelPipeline pipeline = handle.connection.connection.channel.pipeline();
+        pipeline.addBefore("packet_handler", HANDLER_NAME, handler);
     }
 
     public  PacketInterceptor(Player recipient) {

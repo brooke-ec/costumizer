@@ -12,12 +12,7 @@ import net.nimajnebec.costumizer.Costumizer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class CostumizerUiCommand implements Command<CommandSourceStack> {
-    static final String LOGIN_URL = "/login?token=";
-
 
     public Costumizer plugin;
 
@@ -33,8 +28,7 @@ public class CostumizerUiCommand implements Command<CommandSourceStack> {
             return 0;
         }
 
-        String token = plugin.getAuthenticationService().generateToken(player.getUniqueId());
-        String url = constructLoginUrl(token);
+        String url = plugin.getApiService().getLoginUrl(player.getUniqueId());
 
         player.sendMessage(plugin.getChatPrefix()
                 .append(Component.text("Click the link below to open the Costumizer UI:")
@@ -49,13 +43,5 @@ public class CostumizerUiCommand implements Command<CommandSourceStack> {
     private String truncate(String string, int length) {
         if (string.length() > length) return string.substring(0, length - 3) + "...";
         return string;
-    }
-
-    private String constructLoginUrl(String token) {
-        try {
-            return new URL(plugin.getConfiguration().getUiUrl(), LOGIN_URL) + token;
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -5,13 +5,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
 import net.nimajnebec.costumizer.api.CostumizerApiService;
-import net.nimajnebec.costumizer.authentication.AuthenticationService;
 import net.nimajnebec.costumizer.commands.CostumeCommand;
 import net.nimajnebec.costumizer.commands.CostumizerCommand;
 import net.nimajnebec.costumizer.commands.brigadier.BrigadierRegister;
 import net.nimajnebec.costumizer.configuration.ConfigurationException;
 import net.nimajnebec.costumizer.configuration.CostumizerConfiguration;
-import net.nimajnebec.costumizer.protocol.InterceptorInjector;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -29,10 +27,9 @@ public final class Costumizer extends JavaPlugin {
     private final Logger logger = this.getSLF4JLogger();
     private final BrigadierRegister brigadier = new BrigadierRegister(this);
     private final CostumizerConfiguration configuration = new CostumizerConfiguration(this);
-    private final AuthenticationService authentication = new AuthenticationService(this.getConfiguration());
-    private final InterceptorInjector injector = new InterceptorInjector();
+    private final CostumizerApiService apiService = new CostumizerApiService(this);
     private final CostumeService costumeService = new CostumeService(this);
-    private CostumizerApiService apiService;
+    private final PlayerEvents playerEvents = new PlayerEvents(this);
 
     public Costumizer() {
         instance = this;
@@ -57,7 +54,7 @@ public final class Costumizer extends JavaPlugin {
 
         // Setup API Service
         try {
-            this.apiService = new CostumizerApiService(this);
+            this.apiService.initialise();
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -69,15 +66,12 @@ public final class Costumizer extends JavaPlugin {
 
         // Register Events
         PluginManager manager = this.getServer().getPluginManager();
-        manager.registerEvents(injector, this);
+        manager.registerEvents(playerEvents, this);
 
         // Initialise Online Players
         for (Player player : this.getServer().getOnlinePlayers()) {
-            ServerPlayer handle = ((CraftPlayer) player).getHandle();
-            handle.connection.send(costumeService.getTeamPacket());
-            injector.injectInterceptor(player);
+            playerEvents.initialisePlayer(player);
         }
-
 
         logger.info("{} {} Loaded!", this.getName(), this.getPluginMeta().getVersion());
     }
@@ -86,7 +80,7 @@ public final class Costumizer extends JavaPlugin {
     public void onDisable() {
         for (Player player : this.getServer().getOnlinePlayers()) {
             try {
-                injector.removeInterceptor(player);
+                PacketInterceptor.removeInterceptor(player);
             } catch (NoSuchElementException e) {
                 logger.warn("Could not remove packet interceptor from {}", player.getName());
             }
@@ -106,10 +100,6 @@ public final class Costumizer extends JavaPlugin {
 
     public CostumizerConfiguration getConfiguration() {
         return this.configuration;
-    }
-
-    public AuthenticationService getAuthenticationService() {
-        return this.authentication;
     }
 
     public static Costumizer getInstance() {

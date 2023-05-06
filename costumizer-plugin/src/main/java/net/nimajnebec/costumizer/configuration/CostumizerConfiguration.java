@@ -4,9 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.nimajnebec.costumizer.Costumizer;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -15,23 +13,21 @@ public class CostumizerConfiguration {
 
     private final Costumizer plugin;
     private FileConfiguration file;
-    private final Logger logger;
 
     // Config options
-    private URL uiUrl;
+    private URL url;
     private byte[] secret;
     private Component chatPrefix;
     private Component namePrefix;
 
     public CostumizerConfiguration(Costumizer plugin) {
-        this.logger = plugin.getSLF4JLogger();
         this.plugin = plugin;
     }
 
     public void load() throws ConfigurationException {
         this.file = plugin.getConfig();
 
-        this.uiUrl = getURL("url");
+        this.url = getURL("url");
         this.secret = getString("secret").getBytes(StandardCharsets.UTF_8);
         this.chatPrefix = getComponent("chat-prefix").append(Component.text(" "));
         this.namePrefix = getComponent("name-prefix");
@@ -55,8 +51,8 @@ public class CostumizerConfiguration {
 
     // Getters
 
-    public URL getUiUrl() {
-        return this.uiUrl;
+    public URL getUrl() {
+        return this.url;
     }
 
     public byte[] getSecret() {
