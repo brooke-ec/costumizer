@@ -28,7 +28,10 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-        plugin.getCostumeService().cleanupPlayer(event.getPlayer().getUniqueId());
+        CostumeService service = plugin.getCostumeService();
+        Player player = event.getPlayer();
+        if (service.inCostume(player))
+            service.cleanupPlayer(event.getPlayer().getUniqueId());
     }
 
 }

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "costumizer-ui"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["NimajnebEC <nimajnebec@users.noreply.github.com>"]
 packages = [{ include = "costumizer", from = "src/backend" }]
