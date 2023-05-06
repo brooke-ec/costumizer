@@ -1,7 +1,6 @@
 package net.nimajnebec.costumizer;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.nimajnebec.costumizer.configuration.CostumizerConfiguration;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

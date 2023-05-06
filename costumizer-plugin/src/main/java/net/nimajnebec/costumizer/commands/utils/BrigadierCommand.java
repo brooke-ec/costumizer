@@ -1,4 +1,4 @@
-package net.nimajnebec.costumizer.commands.brigadier;
+package net.nimajnebec.costumizer.commands.utils;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;

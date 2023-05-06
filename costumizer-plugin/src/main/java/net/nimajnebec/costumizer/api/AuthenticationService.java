@@ -1,9 +1,9 @@
 package net.nimajnebec.costumizer.api;
 
 import com.google.gson.Gson;
-import net.nimajnebec.costumizer.configuration.CostumizerConfiguration;
 import net.nimajnebec.costumizer.api.json.TokenHeader;
 import net.nimajnebec.costumizer.api.json.TokenPayload;
+import net.nimajnebec.costumizer.configuration.CostumizerConfiguration;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

@@ -2,14 +2,12 @@ package net.nimajnebec.costumizer.commands;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minecraft.commands.CommandSourceStack;
 import net.nimajnebec.costumizer.Costumizer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CostumizerUiCommand implements Command<CommandSourceStack> {
@@ -21,12 +19,8 @@ public class CostumizerUiCommand implements Command<CommandSourceStack> {
     }
 
     @Override
-    public int run(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        CommandSender sender = ctx.getSource().getBukkitSender();
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage(plugin.getChatPrefix().append(plugin.ONLY_PLAYERS_MESSAGE));
-            return 0;
-        }
+    public int run(CommandContext<CommandSourceStack> ctx) {
+        Player player = (Player) ctx.getSource().getBukkitSender();
 
         String url = plugin.getApiService().getLoginUrl(player.getUniqueId());
 

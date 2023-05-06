@@ -1,4 +1,4 @@
-package net.nimajnebec.costumizer.commands.brigadier;
+package net.nimajnebec.costumizer.commands.utils;
 
 import com.destroystokyo.paper.event.brigadier.CommandRegisteredEvent;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;

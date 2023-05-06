@@ -1,13 +1,11 @@
 package net.nimajnebec.costumizer;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
 import net.nimajnebec.costumizer.api.CostumizerApiService;
-import net.nimajnebec.costumizer.commands.CostumeCommand;
-import net.nimajnebec.costumizer.commands.CostumizerCommand;
-import net.nimajnebec.costumizer.commands.brigadier.BrigadierRegister;
+import net.nimajnebec.costumizer.commands.MainCommand;
+import net.nimajnebec.costumizer.commands.utils.BrigadierRegister;
 import net.nimajnebec.costumizer.configuration.ConfigurationException;
 import net.nimajnebec.costumizer.configuration.CostumizerConfiguration;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
@@ -20,12 +18,8 @@ import java.net.MalformedURLException;
 import java.util.NoSuchElementException;
 
 public final class Costumizer extends JavaPlugin {
-    public final Component ONLY_PLAYERS_MESSAGE =
-            Component.text("This command can only be used by players.", NamedTextColor.RED);
-
     private static Costumizer instance;
     private final Logger logger = this.getSLF4JLogger();
-    private final BrigadierRegister brigadier = new BrigadierRegister(this);
     private final CostumizerConfiguration configuration = new CostumizerConfiguration(this);
     private final CostumizerApiService apiService = new CostumizerApiService(this);
     private final CostumeService costumeService = new CostumeService(this);
@@ -60,9 +54,9 @@ public final class Costumizer extends JavaPlugin {
         }
 
         // Register Commands
+        BrigadierRegister brigadier = new BrigadierRegister(this);
         brigadier.setup();
-        brigadier.register("costumizer", new CostumizerCommand());
-        brigadier.register("costume", new CostumeCommand());
+        brigadier.register("costumizer", new MainCommand(this));
 
         // Register Events
         PluginManager manager = this.getServer().getPluginManager();

@@ -10,7 +10,10 @@ import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 public class PacketInterceptor extends ChannelDuplexHandler {
     public static final String HANDLER_NAME = "costumizer_packet_interceptor";

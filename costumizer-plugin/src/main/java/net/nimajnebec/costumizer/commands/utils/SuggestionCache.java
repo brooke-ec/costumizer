@@ -1,19 +1,17 @@
-package net.nimajnebec.costumizer.commands;
+package net.nimajnebec.costumizer.commands.utils;
 
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.nimajnebec.costumizer.Costumizer;
-import net.nimajnebec.costumizer.api.json.CostumeName;
 import org.bukkit.Bukkit;
 
-import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
 public class SuggestionCache {
     private static final long CACHE_DELAY = 30 * 1000;
     private long lastFetched = 0;
-    private String[] suggestions;
+    private String[] suggestions = null;
     private final Callable<String[]> fetcher;
 
     public SuggestionCache(Callable<String[]> fetcher) {
@@ -23,7 +21,8 @@ public class SuggestionCache {
     public CompletableFuture<Suggestions> get(SuggestionsBuilder builder) {
         CompletableFuture<Suggestions> future = new CompletableFuture<>();
 
-        if (System.currentTimeMillis() - lastFetched > CACHE_DELAY && builder.getRemaining().isEmpty()) {
+        if (System.currentTimeMillis() - lastFetched > CACHE_DELAY
+                && (suggestions == null || builder.getRemaining().isEmpty())) {
             Bukkit.getScheduler().runTaskAsynchronously(Costumizer.getInstance(), () -> {
                 try {
                     this.suggestions = fetcher.call();
