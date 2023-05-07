@@ -62,7 +62,7 @@ public class CostumeService {
         player.setPlayerProfile(player.getPlayerProfile());
 
         // Reset Display Name
-        player.displayName(player.teamDisplayName());
+        player.displayName(null);
     }
 
     public boolean inCostume(Player player) {
