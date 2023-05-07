@@ -60,6 +60,9 @@ public class CostumeService {
 
         // Reload profile on clients
         player.setPlayerProfile(player.getPlayerProfile());
+
+        // Reset Display Name
+        player.displayName(player.teamDisplayName());
     }
 
     public boolean inCostume(Player player) {
