@@ -7,6 +7,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.commands.CommandSourceStack;
 import net.nimajnebec.costumizer.Costumizer;
 
+import java.util.function.Supplier;
+
 public class CommandMessage {
     private final Component message;
 
@@ -18,19 +20,21 @@ public class CommandMessage {
         this.message = message;
     }
 
-    public net.minecraft.network.chat.Component create() {
+    public Supplier<net.minecraft.network.chat.Component> create() {
         return this.create(false);
     }
 
-    public net.minecraft.network.chat.Component create(boolean error) {
+    public Supplier<net.minecraft.network.chat.Component> create(boolean error) {
         Component prefix = Costumizer.getInstance().getChatPrefix();
         Component message = this.message;
         if (error) message = message.color(NamedTextColor.RED);
-        return PaperAdventure.asVanilla(prefix.append(message));
+        final Component finalMessage = message;
+
+        return () -> PaperAdventure.asVanilla(prefix.append(finalMessage));
     }
 
     public int fail(CommandContext<CommandSourceStack> ctx) {
-        ctx.getSource().sendFailure(this.create(true), false);
+        ctx.getSource().sendFailure(this.create(true).get(), false);
         return 0;
     }
 

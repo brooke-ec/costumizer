@@ -8,7 +8,7 @@ import net.nimajnebec.costumizer.commands.MainCommand;
 import net.nimajnebec.costumizer.commands.utils.BrigadierRegister;
 import net.nimajnebec.costumizer.configuration.ConfigurationException;
 import net.nimajnebec.costumizer.configuration.CostumizerConfiguration;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
