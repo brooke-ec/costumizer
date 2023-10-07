@@ -1,20 +1,10 @@
-from flask import request, abort, current_app
-import base64
 import jwt
-import os
+from costumizer.config import COSTUMIZER_SECRET
+from flask import abort, current_app, request
 
 
 def get_secret() -> str:
-    if os.path.exists("costumizer.secret"):
-        with open("costumizer.secret", "r") as f:
-            data = f.read()
-            if data != "":
-                return data
-
-    token = base64.b64encode(os.urandom(32)).decode()
-    with open("costumizer.secret", "w") as f:
-        f.write(token)
-    return token
+    return COSTUMIZER_SECRET
 
 
 def ensure_authenticated() -> None:

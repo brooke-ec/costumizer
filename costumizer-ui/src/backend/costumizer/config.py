@@ -1,7 +1,8 @@
-import urllib.parse as urlparse
 import logging
-import dotenv
 import os
+import urllib.parse as urlparse
+
+import dotenv
 
 dotenv.load_dotenv()
 
@@ -13,6 +14,8 @@ def get_required(key: str) -> str:
         exit(1)
     return value
 
+
+COSTUMIZER_SECRET = get_required("COSTUMIZER_SECRET")
 
 MINESKIN_URL_BASE = r"https://api.mineskin.org/generate/"
 MINESKIN_API_KEY = get_required("MINESKIN_API_KEY")
